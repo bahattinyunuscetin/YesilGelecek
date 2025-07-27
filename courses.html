@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Courses - AgriLearn</title>
+  <link rel="stylesheet" href="css/styles.css?v=1.0" />
+  <link rel="stylesheet" href="css/navigation.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="icon" href="images/icon-leaf.png" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="logo-container">
+      <img src="images/hero-image.png" alt="AgriLearn Logo" class="logo" />
+      <h1>AgriLearn</h1>
+    </div>
+    <div class="search-container">
+      <input type="text" id="course-search" placeholder="Search courses..."/>
+      <button class="search-btn" title="Search"><i class="fas fa-search"></i></button>
+    </div>
+    <div class="user-menu">
+      <button onclick="logout()" class="btn logout-btn">Logout</button>
+      <div class="user-avatar">
+        <img src="images/pic-1.jpg" alt="User Avatar" />
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="content">
+      <!-- Enhanced Page Header -->
+      <div class="page-header-enhanced">
+        <div class="header-content">
+          <div class="header-text">
+            <h1 class="page-title">
+              <i class="fas fa-graduation-cap"></i>
+              Agricultural Courses
+            </h1>
+            <p class="page-subtitle">Discover comprehensive courses designed to enhance your farming knowledge and skills</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-primary" onclick="showCreateCourseModal()">
+              <i class="fas fa-plus"></i>
+              Create Course
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Course Filters and Search -->
+      <div class="course-filters">
+        <div class="filter-section">
+          <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" id="course-search" placeholder="Search courses..." class="search-input">
+          </div>
+          <div class="filter-buttons">
+            <button class="filter-btn active" data-category="all">
+              <i class="fas fa-th-large"></i>
+              All Courses
+            </button>
+            <button class="filter-btn" data-category="organic">
+              <i class="fas fa-seedling"></i>
+              Organic Farming
+            </button>
+            <button class="filter-btn" data-category="sustainable">
+              <i class="fas fa-leaf"></i>
+              Sustainable Agriculture
+            </button>
+            <button class="filter-btn" data-category="livestock">
+              <i class="fas fa-horse"></i>
+              Livestock
+            </button>
+            <button class="filter-btn" data-category="horticulture">
+              <i class="fas fa-tree"></i>
+              Horticulture
+            </button>
+          </div>
+        </div>
+        <div class="sort-section">
+          <label for="sort-select">Sort by:</label>
+          <select id="sort-select" class="sort-select">
+            <option value="date">Newest First</option>
+            <option value="rating">Highest Rated</option>
+            <option value="popularity">Most Popular</option>
+            <option value="duration">Duration</option>
+            <option value="alphabetical">A-Z</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Course Statistics -->
+      <div class="course-stats">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-book"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="total-courses">0</h3>
+            <p>Total Courses</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="enrolled-students">0</h3>
+            <p>Enrolled Students</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-star"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="avg-rating">0.0</h3>
+            <p>Average Rating</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="total-hours">0</h3>
+            <p>Total Hours</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Courses Grid -->
+      <div class="courses-container">
+        <div class="courses-grid" id="courses-grid">
+          <!-- Will be populated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div class="loading-state" id="loading" style="display: none;">
+        <div class="loading-spinner">
+          <div class="spinner"></div>
+        </div>
+        <h3>Loading Courses</h3>
+        <p>Please wait while we fetch the latest courses...</p>
+      </div>
+
+      <!-- Error State -->
+      <div class="error-state" id="error-message" style="display: none;">
+        <div class="error-icon">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h3>Unable to Load Courses</h3>
+        <p>We're having trouble loading the courses. Please check your connection and try again.</p>
+        <button type="button" onclick="location.reload()" class="btn btn-primary">
+          <i class="fas fa-redo"></i>
+          Try Again
+        </button>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state" id="empty-state" style="display: none;">
+        <div class="empty-icon">
+          <i class="fas fa-book-open"></i>
+        </div>
+        <h3>No Courses Found</h3>
+        <p>There are no courses matching your search criteria.</p>
+        <button type="button" class="btn btn-primary" onclick="clearFilters()">
+          <i class="fas fa-filter"></i>
+          Clear Filters
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="mobile-nav">
+      <a href="student-dashboard.html" class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
+      <a href="courses.html" class="nav-item active"><i class="fas fa-book"></i><span>Courses</span></a>
+      <a href="marketplace.html" class="nav-item"><i class="fas fa-store"></i><span>Market</span></a>
+      <a href="profile.html" class="nav-item"><i class="fas fa-user"></i><span>Profile</span></a>
+    </div>
+  </footer>
+
+  <!-- Course Quick View Modal -->
+  <div id="quickViewModal" class="modal hidden">
+    <div class="modal-content">
+      <span id="closeQuickView" class="close">&times;</span>
+      <div class="quick-view-content"></div>
+    </div>
+  </div>
+    </div> <!-- End content -->
+  </main>
+
+  <script src="js/sidebar.js"></script>
+  <script src="js/courses.js"></script>
+  <script>
+    function logout() {
+      localStorage.removeItem('agrilearn_token');
+      localStorage.removeItem('agrilearn_user');
+      window.location.href = 'login.html';
+    }
+
+    // Toggle filter dropdown
+    document.querySelector('.filter-btn').addEventListener('click', function() {
+      document.querySelector('.filter-content').classList.toggle('show');
+    });
+
+    // Close filter dropdown when clicking outside
+    window.addEventListener('click', function(event) {
+      if (!event.target.matches('.filter-btn')) {
+        const dropdowns = document.querySelectorAll('.filter-content');
+        dropdowns.forEach(dropdown => {
+          if (dropdown.classList.contains('show')) {
+            dropdown.classList.remove('show');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

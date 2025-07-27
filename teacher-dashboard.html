@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Teacher Dashboard - AgriLearn</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/navigation.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="icon" href="images/hero-image.png" />
+  <style>
+    /* CSS Variables for consistency */
+    :root {
+      --primary-color: #2e7d32;
+      --primary-dark: #005005;
+      --text-color: #1f2937;
+      --text-light: #6b7280;
+      --gray-50: #f9fafb;
+      --gray-300: #d1d5db;
+      --white: #ffffff;
+      --box-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --danger: #dc3545;
+    }
+
+    /* Teacher Dashboard Specific Styles */
+    .teacher-card {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    .teacher-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 15px;
+    }
+
+    .teacher-card h4 {
+      margin: 0 0 10px 0;
+      color: #333;
+      font-size: 1.2em;
+    }
+
+    .course-stats {
+      display: flex;
+      gap: 15px;
+      margin: 10px 0;
+      font-size: 0.9em;
+      color: #666;
+    }
+
+    .course-stats span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .course-status {
+      margin: 10px 0;
+    }
+
+    .status-badge {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8em;
+      font-weight: bold;
+    }
+
+    .status-published {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-draft {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .course-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .review-card {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 15px;
+    }
+
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .review-header h5 {
+      margin: 0;
+      color: #333;
+    }
+
+    .review-date {
+      font-size: 0.8em;
+      color: #666;
+    }
+
+    .review-course {
+      font-weight: bold;
+      color: #28a745;
+      margin: 5px 0;
+    }
+
+    .review-project {
+      color: #666;
+      margin: 5px 0;
+    }
+
+    .review-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #666;
+    }
+
+    .empty-state i {
+      font-size: 3em;
+      margin-bottom: 15px;
+      color: #ddd;
+    }
+
+    .empty-state h3 {
+      margin: 15px 0 10px 0;
+      color: #333;
+    }
+
+    .courses-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .reviews-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="logo-container">
+      <img src="images/hero-image.png" alt="AgriLearn Logo" class="logo" />
+      <h1>AgriLearn</h1>
+    </div>
+    <div class="search-container">
+      <input type="text" placeholder="Search..." class="search-input" />
+      <button type="button" class="search-btn" title="Search"><i class="fas fa-search"></i></button>
+    </div>
+    <div class="user-menu">
+      <button type="button" onclick="logout()" class="btn logout-btn">Logout</button>
+      <div class="user-avatar">
+        <img src="images/pic-1.jpg" alt="Teacher Avatar" />
+      </div>
+    </div>
+  </header>
+
+  <!-- Beautiful Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <a href="teacher-dashboard.html" class="sidebar-brand">
+        <i class="fas fa-leaf"></i>
+        <span>AgriLearn</span>
+      </a>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="teacher-dashboard.html" class="sidebar-item active">
+        <i class="fas fa-home"></i>
+        <span class="sidebar-text">Dashboard</span>
+      </a>
+      <a href="my-courses.html" class="sidebar-item">
+        <i class="fas fa-book"></i>
+        <span class="sidebar-text">My Courses</span>
+      </a>
+      <a href="students.html" class="sidebar-item">
+        <i class="fas fa-users"></i>
+        <span class="sidebar-text">Students</span>
+      </a>
+      <a href="assignments.html" class="sidebar-item">
+        <i class="fas fa-tasks"></i>
+        <span class="sidebar-text">Assignments</span>
+      </a>
+      <a href="projects.html" class="sidebar-item">
+        <i class="fas fa-project-diagram"></i>
+        <span class="sidebar-text">Projects</span>
+      </a>
+      
+      <a href="messages.html" class="sidebar-item">
+        <i class="fas fa-envelope"></i>
+        <span class="sidebar-text">Messages</span>
+        <span class="nav-badge nav-badge-visible">3</span>
+      </a>
+      <a href="marketplace.html" class="sidebar-item">
+        <i class="fas fa-store"></i>
+        <span class="sidebar-text">Marketplace</span>
+      </a>
+      <a href="profile.html" class="sidebar-item">
+        <i class="fas fa-user"></i>
+        <span class="sidebar-text">Profile</span>
+      </a>
+      <a href="about.html" class="sidebar-item">
+        <i class="fas fa-info-circle"></i>
+        <span class="sidebar-text">About</span>
+      </a>
+      <a href="settings.html" class="sidebar-item">
+        <i class="fas fa-cog"></i>
+        <span class="sidebar-text">Settings</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user-info">
+        <i class="fas fa-user-circle"></i>
+        <div>
+          <div class="user-role">Teacher</div>
+          <div class="user-name">NANSHIE ROMUALD</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Wrapper -->
+  <div class="main-wrapper">
+    <div class="content">
+      <div class="welcome-banner">
+        <h2>Welcome back, <span id="user-name">Loading...</span>!</h2>
+        <p>Manage your courses and student progress.</p>
+      </div>
+
+      <div class="stat-container"></div>
+
+      <div class="section-header">
+        <h3>Your Courses</h3>
+        <a href="my-courses.html" class="view-all">View All</a>
+      </div>
+      <div class="courses-list"></div>
+
+      <div class="section-header">
+        <h3>Pending Reviews</h3>
+        <a href="assignments.html" class="view-all">View All</a>
+      </div>
+      <div class="reviews-list"></div>
+    </div>
+  </div>
+  <!-- End of main-wrapper -->
+
+  <footer class="app-footer">
+    <div class="mobile-nav">
+      <a href="teacher-dashboard.html" class="nav-item active"><i class="fas fa-home"></i><span>Home</span></a>
+      <a href="my-courses.html" class="nav-item"><i class="fas fa-book"></i><span>Courses</span></a>
+      <a href="students.html" class="nav-item"><i class="fas fa-users"></i><span>Students</span></a>
+      <a href="profile.html" class="nav-item"><i class="fas fa-user"></i><span>Profile</span></a>
+    </div>
+  </footer>
+
+  <script src="js/dashboard.js"></script>
+  <script>
+    // Additional error handling and utility functions
+    window.addEventListener('error', function(e) {
+      console.log('Global error caught:', e.error);
+      // Prevent error from breaking the page
+      e.preventDefault();
+    });
+
+    // Handle unhandled promise rejections
+    window.addEventListener('unhandledrejection', function(e) {
+      console.log('Unhandled promise rejection:', e.reason);
+      e.preventDefault();
+    });
+
+    // Logout function
+    function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        localStorage.removeItem('agrilearn_user');
+        localStorage.removeItem('agrilearn_token');
+        window.location.href = 'login.html';
+      }
+    }
+
+    // Ensure images load properly
+    document.addEventListener('DOMContentLoaded', function() {
+      const images = document.querySelectorAll('img');
+      images.forEach(img => {
+        img.addEventListener('error', function() {
+          console.log('Image failed to load:', this.src);
+          // Fallback to default image
+          if (this.src.includes('course') || this.src.includes('default')) {
+            this.src = 'images/hero-image.png';
+          }
+        });
+      });
+
+      // Add fallback content if dashboard.js fails to load data
+      setTimeout(function() {
+        const statContainer = document.querySelector('.stat-container');
+        if (statContainer && statContainer.innerHTML.trim() === '') {
+          console.log('Dashboard data not loaded, showing fallback');
+          statContainer.innerHTML = `
+            <div class="stat-card"><h3>2</h3><p>Courses Created</p></div>
+            <div class="stat-card"><h3>5</h3><p>Assignments Created</p></div>
+            <div class="stat-card"><h3>12</h3><p>Total Students</p></div>
+            <div class="stat-card"><h3>3</h3><p>Pending Reviews</p></div>
+          `;
+        }
+      }, 3000); // Wait 3 seconds for dashboard.js to load data
+    });
+  </script>
+  <script src="js/sidebar.js"></script>
+</body>
+</html>

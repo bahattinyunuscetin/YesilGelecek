@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription - AgriLearn</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="images/icon-leaf.png">
+</head>
+<body>
+    <header class="app-header">
+        <div class="logo-container">
+            <img src="images/hero-image.png" alt="AgriLearn Logo" class="logo">
+            <h1>AgriLearn</h1>
+        </div>
+        <div class="search-container">
+            <input type="text" placeholder="Search..." class="search-input">
+            <button class="search-btn" title="Search"><i class="fas fa-search"></i><span class="visually-hidden">Search</span></button>
+        </div>
+        <div class="user-menu">
+            <div class="notifications">
+                <i class="fas fa-bell"></i>
+                <span class="notification-count">3</span>
+            </div>
+            <div class="user-avatar">
+                <img src="images/pic-1.jpg" alt="User Avatar">
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="sidebar">
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="courses.html"><i class="fas fa-book"></i> Courses</a></li>
+                    <li><a href="marketplace.html"><i class="fas fa-store"></i> Marketplace</a></li>
+                    <li><a href="projects.html"><i class="fas fa-tasks"></i> Projects</a></li>
+                    <li><a href="messages.html"><i class="fas fa-envelope"></i> Messages</a></li>
+                    <li class="active"><a href="subscription.html"><i class="fas fa-crown"></i> Subscription</a></li>
+                    <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="content">
+            <div class="page-header">
+                <h2>Subscription Plans</h2>
+                <div class="current-plan-badge">
+                    <span class="plan-name">Free Plan</span>
+                    <span class="plan-status">Active</span>
+                </div>
+            </div>
+
+            <div class="current-subscription">
+                <div class="subscription-card">
+                    <div class="subscription-header">
+                        <h3>Current Plan: Free</h3>
+                        <div class="subscription-status">
+                            <span class="status-badge active">Active</span>
+                        </div>
+                    </div>
+                    <div class="subscription-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Plan Type:</span>
+                            <span class="detail-value">Free</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Monthly Cost:</span>
+                            <span class="detail-value">$0.00</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Courses Access:</span>
+                            <span class="detail-value">3 Free Courses</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Next Billing:</span>
+                            <span class="detail-value">N/A</span>
+                        </div>
+                    </div>
+                    <div class="subscription-actions">
+                        <button class="btn btn-primary">Upgrade Plan</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <h3>Available Plans</h3>
+                <div class="billing-toggle">
+                    <span class="toggle-label">Monthly</span>
+                    <label class="toggle-switch" for="billing-toggle">
+                        <input type="checkbox" id="billing-toggle" title="Toggle billing period" aria-label="Toggle billing period">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-label">Yearly <span class="discount-badge">Save 20%</span></span>
+                </div>
+            </div>
+
+            <div class="subscription-plans">
+                <div class="plan-card">
+                    <div class="plan-header">
+                        <h3>Free</h3>
+                        <div class="plan-price">
+                            <span class="price-amount">$0</span>
+                            <span class="price-period">/month</span>
+                        </div>
+                    </div>
+                    <div class="plan-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> Access to 3 free courses</li>
+                            <li><i class="fas fa-check"></i> Basic marketplace access</li>
+                            <li><i class="fas fa-check"></i> Community discussions</li>
+                            <li><i class="fas fa-times"></i> Limited project submissions</li>
+                            <li><i class="fas fa-times"></i> No certificates</li>
+                            <li><i class="fas fa-times"></i> No priority support</li>
+                        </ul>
+                    </div>
+                    <div class="plan-action">
+                        <button class="btn btn-outline disabled">Current Plan</button>
+                    </div>
+                </div>
+
+                <div class="plan-card featured">
+                    <div class="plan-badge">Most Popular</div>
+                    <div class="plan-header">
+                        <h3>Premium</h3>
+                        <div class="plan-price">
+                            <span class="price-amount monthly-price">$29.99</span>
+                            <span class="price-amount yearly-price">$23.99</span>
+                            <span class="price-period">/month</span>
+                        </div>
+                        <div class="yearly-savings">
+                            <span class="savings-text">Save $72/year</span>
+                        </div>
+                    </div>
+                    <div class="plan-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> Unlimited course access</li>
+                            <li><i class="fas fa-check"></i> Full marketplace features</li>
+                            <li><i class="fas fa-check"></i> Unlimited projects</li>
+                            <li><i class="fas fa-check"></i> Course certificates</li>
+                            <li><i class="fas fa-check"></i> Priority support</li>
+                            <li><i class="fas fa-check"></i> Mobile app access</li>
+                        </ul>
+                    </div>
+                    <div class="plan-action">
+                        <button class="btn btn-primary" data-plan="premium">Upgrade to Premium</button>
+                    </div>
+                </div>
+
+                <div class="plan-card">
+                    <div class="plan-header">
+                        <h3>Pro</h3>
+                        <div class="plan-price">
+                            <span class="price-amount monthly-price">$49.99</span>
+                            <span class="price-amount yearly-price hidden-yearly-price">$39.99</span>
+                            <span class="price-period">/month</span>
+                        </div>
+                        <div class="yearly-savings hidden-yearly-savings">
+                            <span class="savings-text">Save $120/year</span>
+                        </div>
+                    </div>
+                    <div class="plan-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> Everything in Premium</li>
+                            <li><i class="fas fa-check"></i> Course creation tools</li>
+                            <li><i class="fas fa-check"></i> Advanced analytics</li>
+                            <li><i class="fas fa-check"></i> Bulk marketplace orders</li>
+                            <li><i class="fas fa-check"></i> 1-on-1 mentoring</li>
+                            <li><i class="fas fa-check"></i> White-label options</li>
+                        </ul>
+                    </div>
+                    <div class="plan-action">
+                        <button class="btn btn-primary" data-plan="pro">Upgrade to Pro</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subscription-benefits">
+                <h3>Why Upgrade?</h3>
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-infinity"></i>
+                        </div>
+                        <h4>Unlimited Access</h4>
+                        <p>Access all courses and learning materials without restrictions.</p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <h4>Certificates</h4>
+                        <p>Earn verified certificates upon course completion.</p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h4>Priority Support</h4>
+                        <p>Get faster response times and dedicated support.</p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h4>Mobile Access</h4>
+                        <p>Learn on-the-go with our mobile app.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Upgrade Subscription</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="payment-summary">
+                    <h4>Order Summary</h4>
+                    <div class="summary-item">
+                        <span>Plan:</span>
+                        <span id="selected-plan">Premium</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Billing:</span>
+                        <span id="selected-billing">Monthly</span>
+                    </div>
+                    <div class="summary-item total">
+                        <span>Total:</span>
+                        <span id="total-amount">$29.99/month</span>
+                    </div>
+                </div>
+                
+                <form id="payment-form">
+                    <div class="form-group">
+                        <label for="card-number">Card Number</label>
+                        <input type="text" id="card-number" placeholder="1234 5678 9012 3456" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="expiry">Expiry Date</label>
+                            <input type="text" id="expiry" placeholder="MM/YY" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv">CVV</label>
+                            <input type="text" id="cvv" placeholder="123" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cardholder-name">Cardholder Name</label>
+                        <input type="text" id="cardholder-name" placeholder="John Doe" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline" id="cancel-payment">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Complete Payment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="app-footer">
+        <div class="mobile-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="courses.html" class="nav-item">
+                <i class="fas fa-book"></i>
+                <span>Courses</span>
+            </a>
+            <a href="marketplace.html" class="nav-item">
+                <i class="fas fa-store"></i>
+                <span>Market</span>
+            </a>
+            <a href="subscription.html" class="nav-item active">
+                <i class="fas fa-crown"></i>
+                <span>Premium</span>
+            </a>
+        </div>
+    </footer>
+
+    <script src="js/subscription.js"></script>
+</body>
+</html>

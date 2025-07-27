@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Course Detail - AgriLearn</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="icon" type="image/png" href="images/icon-leaf.png" />
+</head>
+
+<body>
+  <header class="app-header">
+    <div class="logo-container">
+      <img src="images/hero-image.png" alt="AgriLearn Logo" class="logo" />
+      <h1>AgriLearn</h1>
+    </div>
+    <div class="search-container">
+      <input type="text" placeholder="Search..." class="search-input" />
+      <button class="search-btn" aria-label="Search"><i class="fas fa-search"></i></button>
+    </div>
+    <div class="user-menu">
+      <div class="user-avatar">
+        <img src="images/pic-1.jpg" alt="User Avatar" />
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="sidebar">
+      <nav class="main-nav">
+        <ul>
+          <li><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+          <li class="active"><a href="courses.html"><i class="fas fa-book"></i> Courses</a></li>
+          <li><a href="marketplace.html"><i class="fas fa-store"></i> Marketplace</a></li>
+          <li><a href="projects.html"><i class="fas fa-tasks"></i> Projects</a></li>
+          <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="content">
+      <div class="course-header">
+        <div class="course-banner">
+          <img id="course-image" src="images/default.jpg" alt="Course Banner" />
+          <div class="course-overlay">
+            <h2 id="course-title">Loading...</h2>
+            <div class="course-meta">
+              <div class="course-rating" id="course-rating">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                <span>(0.0)</span>
+              </div>
+              <div class="course-students"><i class="fas fa-users"></i><span>-- Students</span></div>
+              <div class="course-instructor"><i class="fas fa-chalkboard-teacher"></i><span>Instructor</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-tabs">
+        <button class="tab-btn active" data-tab="overview">Overview</button>
+        <button class="tab-btn" data-tab="curriculum">Curriculum</button>
+        <button class="tab-btn" data-tab="projects">Projects</button>
+        <button class="tab-btn" data-tab="discussions">Discussions</button>
+      </div>
+
+      <div class="tab-content">
+        <!-- Overview -->
+        <div class="tab-pane active" id="overview">
+          <div class="course-description">
+            <h3>About This Course</h3>
+            <p id="course-description">Loading description...</p>
+          </div>
+
+          <div class="course-sidebar">
+            <div class="course-card">
+              <div class="course-price" id="course-price">$0.00</div>
+              <button class="btn btn-primary btn-block" id="enroll-btn">Enroll Now</button>
+              <div class="course-includes">
+                <h4>This Course Includes:</h4>
+                <ul>
+                  <li><i class="fas fa-video"></i> 12 hours of video</li>
+                  <li><i class="fas fa-file-alt"></i> 15 downloadable resources</li>
+                  <li><i class="fas fa-infinity"></i> Full lifetime access</li>
+                  <li><i class="fas fa-mobile-alt"></i> Access on mobile and TV</li>
+                  <li><i class="fas fa-certificate"></i> Certificate of completion</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="instructor-card">
+              <h4>Your Instructor</h4>
+              <div class="instructor-info">
+                <div class="instructor-avatar">
+                  <img src="images/instructor1.jpg" alt="Instructor Avatar" />
+                </div>
+                <div class="instructor-details">
+                  <h5 id="instructor-name">Loading...</h5>
+                  <p>Agricultural Expert</p>
+                </div>
+              </div>
+              <p class="instructor-bio">This instructor is dedicated to sustainable agriculture and organic farming practices.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Curriculum (Dynamically Loaded via JS) -->
+        <div class="tab-pane" id="curriculum">
+          <div class="curriculum-container"></div>
+        </div>
+
+        <!-- Projects (Static sample or can be made dynamic later) -->
+        <div class="tab-pane" id="projects">
+          <div class="projects-constainer">
+            <p>No projects found. This section will load student assignments.</p>
+          </div>
+        </div>
+
+        <!-- Discussions -->
+        <div class="tab-pane" id="discussions">
+          <div class="discussions-container">
+            <div class="discussion-form">
+              <h3>Ask a Question</h3>
+              <form id="discussion-form">
+                <div class="form-group">
+                  <label for="discussion-title">Title</label>
+                  <input type="text" id="discussion-title" name="discussion-title" placeholder="Enter your question title" required />
+                </div>
+                <div class="form-group">
+                  <label for="discussion-content">Description</label>
+                  <textarea id="discussion-content" name="discussion-content" placeholder="Describe your question in detail" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Post Question</button>
+              </form>
+            </div>
+            <div class="discussion-list">
+              <h3>Recent Discussions</h3>
+              <!-- Will be injected by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="mobile-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
+      <a href="courses.html" class="nav-item active"><i class="fas fa-book"></i><span>Courses</span></a>
+      <a href="marketplace.html" class="nav-item"><i class="fas fa-store"></i><span>Market</span></a>
+      <a href="profile.html" class="nav-item"><i class="fas fa-user"></i><span>Profile</span></a>
+    </div>
+  </footer>
+
+<script src="js/course-detail.js"></script>
+  <script>
+    // Ensure logout is accessible if button calls it directly
+    function logout() {
+      localStorage.removeItem('agrilearn_token');
+      localStorage.removeItem('agrilearn_user');
+      window.location.href = 'login.html'; // Or your actual login page
+    }
+  </script>
+</body>
+</html>

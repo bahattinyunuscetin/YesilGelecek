@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management - AgriLearn</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/navigation.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="images/hero-image.png">
+    <style>
+        .product-management-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2.5rem;
+        }
+
+        .page-header p {
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-add-product {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add-product:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .product-status {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background: var(--success);
+            color: white;
+        }
+
+        .status-inactive {
+            background: var(--danger);
+            color: white;
+        }
+
+        .status-pending {
+            background: var(--warning);
+            color: white;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0 0 0.5rem 0;
+            color: var(--text-color);
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0 0 1rem 0;
+        }
+
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-edit, .btn-delete {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background: var(--info);
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #0056b3;
+        }
+
+        .btn-delete {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #c82333;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: #000;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        .btn-save, .btn-cancel {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-save {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-save:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-cancel {
+            background: var(--gray-300);
+            color: var(--text-color);
+        }
+
+        .btn-cancel:hover {
+            background: var(--gray-400);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-light);
+        }
+
+        .loading i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-light);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: var(--gray-300);
+        }
+
+        .empty-state h3 {
+            margin: 0 0 0.5rem 0;
+            color: var(--text-color);
+        }
+
+        @media (max-width: 768px) {
+            .product-management-container {
+                padding: 1rem;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .modal-content {
+                margin: 10% auto;
+                width: 95%;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="images/hero-image.png" alt="AgriLearn Logo">
+                <span>AgriLearn</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="courses.html" class="nav-link">Courses</a>
+                <a href="marketplace.html" class="nav-link">Marketplace</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </div>
+            <div class="nav-auth">
+                <div id="auth-buttons">
+                    <a href="login.html" class="btn btn-outline">Login</a>
+                    <a href="signup.html" class="btn btn-primary">Sign Up</a>
+                </div>
+                <div id="user-avatar" class="user-avatar hidden">
+                    <img src="images/default-avatar.png" alt="User Avatar">
+                </div>
+                <button id="logout-btn" class="btn btn-outline hidden" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="product-management-container">
+        <div class="page-header">
+            <h1><i class="fas fa-store"></i> Product Management</h1>
+            <p>Manage your marketplace products and inventory</p>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn-add-product" onclick="openAddProductModal()">
+                <i class="fas fa-plus"></i>
+                Add New Product
+            </button>
+        </div>
+
+        <div id="loading" class="loading">
+            <i class="fas fa-spinner"></i>
+            <p>Loading products...</p>
+        </div>
+
+        <div id="products-container" class="products-grid" style="display: none;">
+            <!-- Products will be loaded here -->
+        </div>
+
+        <div id="empty-state" class="empty-state" style="display: none;">
+            <i class="fas fa-box-open"></i>
+            <h3>No products yet</h3>
+            <p>Start by adding your first product to the marketplace</p>
+        </div>
+    </div>
+
+    <!-- Add/Edit Product Modal -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeProductModal()">&times;</span>
+            <h2 id="modal-title">Add New Product</h2>
+            <form id="product-form" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="product-name">Product Name *</label>
+                    <input type="text" id="product-name" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product-description">Description *</label>
+                    <textarea id="product-description" name="description" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product-price">Price ($) *</label>
+                    <input type="number" id="product-price" name="price" step="0.01" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product-category">Category *</label>
+                    <select id="product-category" name="category" required>
+                        <option value="">Select Category</option>
+                        <option value="seeds">Seeds</option>
+                        <option value="tools">Tools</option>
+                        <option value="fertilizers">Fertilizers</option>
+                        <option value="equipment">Equipment</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product-stock">Stock Quantity *</label>
+                    <input type="number" id="product-stock" name="stockQuantity" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product-images">Product Images</label>
+                    <input type="file" id="product-images" name="images" multiple accept="image/*">
+                    <small>You can select multiple images. First image will be the main product image.</small>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeProductModal()">Cancel</button>
+                    <button type="submit" class="btn-save">Save Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/api/marketplace-api.js"></script>
+    <script>
+        let currentUser = null;
+        let products = [];
+        let editingProductId = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            loadProducts();
+        });
+
+        function checkAuth() {
+            const user = JSON.parse(localStorage.getItem('agrilearn_user'));
+            const token = localStorage.getItem('agrilearn_token');
+            
+            if (!user || !token || user.role !== 'teacher') {
+                showNotification('Access denied. Teachers only.', 'error');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+                return;
+            }
+            
+            currentUser = user;
+            updateNavForLoggedInUser();
+        }
+
+        function updateNavForLoggedInUser() {
+            const authButtons = document.getElementById('auth-buttons');
+            const logoutBtn = document.getElementById('logout-btn');
+            const userAvatar = document.getElementById('user-avatar');
+            
+            if (authButtons) authButtons.classList.add('hidden');
+            if (logoutBtn) logoutBtn.classList.remove('hidden');
+            if (userAvatar) userAvatar.classList.remove('hidden');
+        }
+
+        async function loadProducts() {
+            try {
+                showLoading(true);
+                
+                const data = await marketplaceAPI.getProducts();
+                
+                if (data.success) {
+                    products = data.products.filter(p => p.seller._id === currentUser.id);
+                    renderProducts();
+                } else {
+                    throw new Error(data.message || 'Failed to load products');
+                }
+            } catch (error) {
+                console.error('Error loading products:', error);
+                showNotification('Failed to load products', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function renderProducts() {
+            const container = document.getElementById('products-container');
+            const emptyState = document.getElementById('empty-state');
+            
+            if (products.length === 0) {
+                container.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            container.style.display = 'grid';
+            emptyState.style.display = 'none';
+            
+            container.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <div class="product-image" style="background-image: url('${product.image}')">
+                        <div class="product-status status-${product.status}">${product.status}</div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">${product.name}</h3>
+                        <div class="product-price">$${product.price.toFixed(2)}</div>
+                        <div class="product-meta">
+                            <span><i class="fas fa-tag"></i> ${product.category}</span>
+                            <span><i class="fas fa-boxes"></i> ${product.stockQuantity}</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn-edit" onclick="editProduct('${product._id}')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn-delete" onclick="deleteProduct('${product._id}')">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showLoading(show) {
+            const loading = document.getElementById('loading');
+            loading.style.display = show ? 'block' : 'none';
+        }
+
+        function openAddProductModal() {
+            editingProductId = null;
+            document.getElementById('modal-title').textContent = 'Add New Product';
+            document.getElementById('product-form').reset();
+            document.getElementById('product-modal').style.display = 'block';
+        }
+
+        function editProduct(productId) {
+            const product = products.find(p => p._id === productId);
+            if (!product) return;
+            
+            editingProductId = productId;
+            document.getElementById('modal-title').textContent = 'Edit Product';
+            
+            // Fill form with product data
+            document.getElementById('product-name').value = product.name;
+            document.getElementById('product-description').value = product.description;
+            document.getElementById('product-price').value = product.price;
+            document.getElementById('product-category').value = product.category;
+            document.getElementById('product-stock').value = product.stockQuantity;
+            
+            document.getElementById('product-modal').style.display = 'block';
+        }
+
+        function closeProductModal() {
+            document.getElementById('product-modal').style.display = 'none';
+            editingProductId = null;
+        }
+
+        async function deleteProduct(productId) {
+            if (!confirm('Are you sure you want to delete this product?')) return;
+            
+            try {
+                const data = await marketplaceAPI.deleteProduct(productId);
+                
+                if (data.success) {
+                    showNotification('Product deleted successfully', 'success');
+                    loadProducts();
+                } else {
+                    throw new Error(data.message || 'Failed to delete product');
+                }
+            } catch (error) {
+                console.error('Error deleting product:', error);
+                showNotification('Failed to delete product', 'error');
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('product-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            try {
+                const formData = new FormData(this);
+                
+                let data;
+                if (editingProductId) {
+                    data = await marketplaceAPI.updateProduct(editingProductId, formData);
+                } else {
+                    data = await marketplaceAPI.createProduct(formData);
+                }
+                
+                if (data.success) {
+                    showNotification(editingProductId ? 'Product updated successfully' : 'Product created successfully', 'success');
+                    closeProductModal();
+                    loadProducts();
+                } else {
+                    throw new Error(data.message || 'Failed to save product');
+                }
+            } catch (error) {
+                console.error('Error saving product:', error);
+                showNotification('Failed to save product', 'error');
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem('agrilearn_user');
+            localStorage.removeItem('agrilearn_token');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

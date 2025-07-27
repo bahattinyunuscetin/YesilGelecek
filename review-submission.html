@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Review Submission - AgriLearn</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" href="images/hero-image.png">
+  <style>
+    .review-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .review-header {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    
+    .submission-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .info-card {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 6px;
+    }
+    
+    .submission-content {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    
+    .review-form {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    
+    .status-submitted {
+      background: #fff3cd;
+      color: #856404;
+    }
+    
+    .status-approved {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .status-rejected {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+    
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+    
+    .btn-primary {
+      background: #007bff;
+      color: white;
+    }
+    
+    .btn-success {
+      background: #28a745;
+      color: white;
+    }
+    
+    .btn-danger {
+      background: #dc3545;
+      color: white;
+    }
+    
+    .btn-outline {
+      background: transparent;
+      color: #6c757d;
+      border: 1px solid #6c757d;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 40px;
+    }
+    
+    .error-state {
+      text-align: center;
+      padding: 40px;
+      color: #dc3545;
+    }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="logo-container">
+      <img src="images/hero-image.png" alt="AgriLearn Logo" class="logo" />
+      <h1>AgriLearn</h1>
+    </div>
+    <div class="search-container">
+      <input type="text" placeholder="Search..." class="search-input" />
+      <button type="button" class="search-btn" title="Search"><i class="fas fa-search"></i></button>
+    </div>
+    <div class="user-menu">
+      <button type="button" onclick="logout()" class="btn logout-btn">Logout</button>
+      <div class="user-avatar">
+        <img src="images/pic-1.jpg" alt="Teacher Avatar" />
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="sidebar">
+      <nav class="main-nav">
+        <ul>
+          <li><a href="teacher-dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+          <li><a href="my-courses.html"><i class="fas fa-book"></i> My Courses</a></li>
+          <li><a href="students.html"><i class="fas fa-users"></i> Students</a></li>
+          <li class="active"><a href="assignments.html"><i class="fas fa-tasks"></i> Assignments</a></li>
+          <li><a href="marketplace.html"><i class="fas fa-store"></i> Marketplace</a></li>
+          <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="content">
+      <div class="review-container">
+        <div id="loading" class="loading">
+          <i class="fas fa-spinner fa-spin"></i>
+          <p>Loading submission...</p>
+        </div>
+
+        <div id="error-state" class="error-state" style="display: none;">
+          <i class="fas fa-exclamation-triangle"></i>
+          <h3>Error Loading Submission</h3>
+          <p id="error-message">Unable to load the submission details.</p>
+          <button type="button" onclick="window.history.back()" class="btn btn-outline">Go Back</button>
+        </div>
+
+        <div id="review-content" style="display: none;">
+          <div class="review-header">
+            <h2>Review Project Submission</h2>
+            <div class="submission-info">
+              <div class="info-card">
+                <h4>Student Information</h4>
+                <p><strong>Name:</strong> <span id="student-name">-</span></p>
+                <p><strong>Email:</strong> <span id="student-email">-</span></p>
+                <p><strong>Submitted:</strong> <span id="submission-date">-</span></p>
+              </div>
+              <div class="info-card">
+                <h4>Project Information</h4>
+                <p><strong>Course:</strong> <span id="course-title">-</span></p>
+                <p><strong>Project:</strong> <span id="project-title">-</span></p>
+                <p><strong>Status:</strong> <span id="project-status" class="status-badge">-</span></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="submission-content">
+            <h3>Project Submission</h3>
+            <div id="project-content">
+              <p>Loading project content...</p>
+            </div>
+          </div>
+
+          <div class="review-form">
+            <h3>Review & Feedback</h3>
+            <form id="review-form">
+              <div class="form-group">
+                <label for="review-status">Review Decision</label>
+                <select id="review-status" name="status" required>
+                  <option value="">Select decision...</option>
+                  <option value="approved">Approve</option>
+                  <option value="rejected">Reject</option>
+                  <option value="submitted">Request Revision</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="review-feedback">Feedback & Comments</label>
+                <textarea id="review-feedback" name="feedback" placeholder="Provide detailed feedback for the student..." required></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="review-grade">Grade (Optional)</label>
+                <input type="number" id="review-grade" name="grade" min="0" max="100" placeholder="Enter grade (0-100)">
+              </div>
+
+              <div class="form-actions">
+                <button type="button" onclick="window.history.back()" class="btn btn-outline">Cancel</button>
+                <button type="submit" class="btn btn-primary">Submit Review</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuth();
+      loadSubmission();
+      setupEventListeners();
+    });
+
+    function checkAuth() {
+      const user = JSON.parse(localStorage.getItem('agrilearn_user'));
+      const token = localStorage.getItem('agrilearn_token');
+      
+      if (!user || !token || user.role !== 'teacher') {
+        window.location.href = 'login.html';
+        return;
+      }
+    }
+
+    async function loadSubmission() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const submissionId = urlParams.get('id');
+      
+      if (!submissionId) {
+        showError('No submission ID provided');
+        return;
+      }
+
+      try {
+        const token = localStorage.getItem('agrilearn_token');
+        const response = await fetch(`http://localhost:5000/projects/${submissionId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to load submission');
+        }
+
+        const data = await response.json();
+        displaySubmission(data.project);
+        
+      } catch (error) {
+        console.error('Error loading submission:', error);
+        showError('Failed to load submission details');
+      }
+    }
+
+    function displaySubmission(project) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('review-content').style.display = 'block';
+
+      // Student info
+      document.getElementById('student-name').textContent = project.student?.name || 'Unknown';
+      document.getElementById('student-email').textContent = project.student?.email || 'Unknown';
+      document.getElementById('submission-date').textContent = formatDate(project.submittedAt);
+
+      // Project info
+      document.getElementById('course-title').textContent = project.course?.title || 'Unknown Course';
+      document.getElementById('project-title').textContent = project.title || 'Untitled Project';
+      
+      const statusBadge = document.getElementById('project-status');
+      statusBadge.textContent = project.status;
+      statusBadge.className = `status-badge status-${project.status}`;
+
+      // Project content
+      document.getElementById('project-content').innerHTML = `
+        <p><strong>Project Description:</strong></p>
+        <p>${project.description || 'No description provided.'}</p>
+        ${project.fileUrl ? `<p><strong>Attached File:</strong> <a href="${project.fileUrl}" target="_blank">Download</a></p>` : ''}
+      `;
+    }
+
+    function setupEventListeners() {
+      const reviewForm = document.getElementById('review-form');
+      reviewForm.addEventListener('submit', handleReviewSubmission);
+    }
+
+    async function handleReviewSubmission(e) {
+      e.preventDefault();
+      
+      const urlParams = new URLSearchParams(window.location.search);
+      const submissionId = urlParams.get('id');
+      
+      const formData = new FormData(e.target);
+      const reviewData = {
+        status: formData.get('status'),
+        feedback: formData.get('feedback'),
+        grade: formData.get('grade') ? parseInt(formData.get('grade')) : null
+      };
+
+      try {
+        const token = localStorage.getItem('agrilearn_token');
+        const response = await fetch(`http://localhost:5000/projects/${submissionId}/review`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(reviewData)
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to submit review');
+        }
+
+        alert('Review submitted successfully!');
+        window.location.href = 'teacher-dashboard.html';
+        
+      } catch (error) {
+        console.error('Error submitting review:', error);
+        alert('Failed to submit review. Please try again.');
+      }
+    }
+
+    function showError(message) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('error-message').textContent = message;
+      document.getElementById('error-state').style.display = 'block';
+    }
+
+    function formatDate(dateString) {
+      if (!dateString) return 'Unknown';
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    function logout() {
+      localStorage.removeItem('agrilearn_user');
+      localStorage.removeItem('agrilearn_token');
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Assignment - AgriLearn</title>
+    <link rel="stylesheet" href="css/styles.css?v=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="images/icon-leaf.png">
+    <style>
+        .submit-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .assignment-info {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .assignment-title {
+            font-size: 1.5rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+        
+        .assignment-meta {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+        }
+        
+        .meta-item i {
+            color: var(--primary-color);
+        }
+        
+        .submission-form {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .form-section {
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+        }
+        
+        .file-upload-area {
+            border: 2px dashed var(--gray-300);
+            border-radius: 8px;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .file-upload-area:hover {
+            border-color: var(--primary-color);
+            background: var(--gray-50);
+        }
+        
+        .file-upload-area.dragover {
+            border-color: var(--primary-color);
+            background: var(--primary-light);
+        }
+        
+        .upload-icon {
+            font-size: 4rem;
+            color: var(--gray-400);
+            margin-bottom: 1rem;
+        }
+        
+        .upload-text {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .upload-subtext {
+            color: var(--text-light);
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .upload-btn {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        
+        .upload-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .uploaded-files {
+            margin-top: 1.5rem;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: var(--gray-50);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            border: 1px solid var(--gray-200);
+        }
+        
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .file-icon {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .file-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .file-name {
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .file-size {
+            color: var(--text-light);
+            font-size: 0.875rem;
+        }
+        
+        .file-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 6px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+        }
+        
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+        }
+        
+        .submission-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--gray-200);
+        }
+        
+        .action-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--gray-200);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+            display: none;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+        
+        .upload-status {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-light);
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .submit-container {
+                padding: 1rem;
+            }
+            
+            .assignment-meta {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .submission-actions {
+                flex-direction: column;
+            }
+            
+            .file-upload-area {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <div class="logo-container">
+            <img src="images/hero-image.png" alt="AgriLearn Logo" class="logo">
+            <h1>AgriLearn</h1>
+        </div>
+        <div class="search-container">
+            <input type="text" placeholder="Search..." class="search-input">
+            <button type="button" class="search-btn" title="Search"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="user-menu">
+            <button type="button" onclick="logout()" class="btn logout-btn">Logout</button>
+            <div class="user-avatar">
+                <img src="images/pic-1.jpg" alt="User Avatar">
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="sidebar">
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="student-dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="courses.html"><i class="fas fa-book"></i> Courses</a></li>
+                    <li><a href="marketplace.html"><i class="fas fa-store"></i> Marketplace</a></li>
+                    <li><a href="projects.html"><i class="fas fa-tasks"></i> Projects</a></li>
+                    <li class="active"><a href="assignments.html"><i class="fas fa-clipboard-list"></i> Assignments</a></li>
+                    <li><a href="messages.html"><i class="fas fa-envelope"></i> Messages</a></li>
+                    <li><a href="subscription.html"><i class="fas fa-crown"></i> Subscription</a></li>
+                    <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="content">
+            <div class="submit-container">
+                <!-- Back button -->
+                <div style="margin-bottom: 1rem;">
+                    <a href="assignments.html" class="action-btn btn-outline">
+                        <i class="fas fa-arrow-left"></i> Back to Assignments
+                    </a>
+                </div>
+
+                <!-- Assignment Info -->
+                <div class="assignment-info">
+                    <h1 class="assignment-title" id="assignment-title">Loading...</h1>
+                    
+                    <div class="assignment-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-book"></i>
+                            <span id="assignment-course">Loading...</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>Due: <span id="assignment-due-date">Loading...</span></span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-star"></i>
+                            <span id="assignment-points">Loading...</span>
+                        </div>
+                    </div>
+                    
+                    <div id="assignment-description" style="margin-top: 1rem; color: var(--text-light);">
+                        Loading assignment description...
+                    </div>
+                </div>
+
+                <!-- Submission Form -->
+                <div class="submission-form">
+                    <form id="submission-form">
+                        <div class="form-section">
+                            <h2 class="section-title">Upload Files</h2>
+                            
+                            <div class="file-upload-area" id="upload-area">
+                                <div class="upload-icon">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                </div>
+                                <div class="upload-text">
+                                    Drag and drop your files here
+                                </div>
+                                <div class="upload-subtext">
+                                    or click to browse and select files
+                                </div>
+                                <button type="button" class="upload-btn" onclick="document.getElementById('file-input').click()">
+                                    <i class="fas fa-folder-open"></i> Choose Files
+                                </button>
+                                <input type="file" id="file-input" class="file-input" multiple accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.zip">
+                            </div>
+                            
+                            <div class="progress-bar" id="progress-bar">
+                                <div class="progress-fill" id="progress-fill"></div>
+                            </div>
+                            <div class="upload-status" id="upload-status"></div>
+                            
+                            <div class="uploaded-files" id="uploaded-files"></div>
+                        </div>
+
+                        <div class="form-section">
+                            <h2 class="section-title">Submission Notes</h2>
+                            <div class="form-group">
+                                <label for="submission-notes">Additional Comments (Optional)</label>
+                                <textarea id="submission-notes" name="notes" placeholder="Add any additional comments or notes about your submission..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="submission-actions">
+                            <a href="assignments.html" class="action-btn btn-outline">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                            <button type="button" class="action-btn btn-primary" id="submit-btn" onclick="submitAssignment()">
+                                <i class="fas fa-paper-plane"></i> Submit Assignment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <div class="mobile-nav">
+            <a href="student-dashboard.html" class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
+            <a href="courses.html" class="nav-item"><i class="fas fa-book"></i><span>Courses</span></a>
+            <a href="marketplace.html" class="nav-item"><i class="fas fa-store"></i><span>Market</span></a>
+            <a href="profile.html" class="nav-item"><i class="fas fa-user"></i><span>Profile</span></a>
+        </div>
+    </footer>
+
+    <script>
+        let selectedFiles = [];
+        let assignmentId = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            assignmentId = urlParams.get('id');
+            
+            if (assignmentId) {
+                loadAssignmentInfo(assignmentId);
+                setupFileUpload();
+            } else {
+                alert('Assignment ID not found');
+                window.location.href = 'assignments.html';
+            }
+        });
+
+        async function loadAssignmentInfo(id) {
+            try {
+                const response = await fetch(`http://localhost:5000/api/assignments/${id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('agrilearn_token')}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const assignment = await response.json();
+                    displayAssignmentInfo(assignment);
+                } else {
+                    alert('Failed to load assignment information');
+                    window.location.href = 'assignments.html';
+                }
+            } catch (error) {
+                console.error('Error loading assignment:', error);
+                alert('Error loading assignment information');
+                window.location.href = 'assignments.html';
+            }
+        }
+
+        function displayAssignmentInfo(assignment) {
+            document.getElementById('assignment-title').textContent = assignment.title;
+            document.getElementById('assignment-course').textContent = assignment.course?.title || 'General';
+            document.getElementById('assignment-due-date').textContent = new Date(assignment.dueDate).toLocaleDateString();
+            document.getElementById('assignment-points').textContent = `${assignment.points || 0} points`;
+            document.getElementById('assignment-description').textContent = assignment.description;
+        }
+
+        function setupFileUpload() {
+            const fileInput = document.getElementById('file-input');
+            const uploadArea = document.getElementById('upload-area');
+            const uploadedFiles = document.getElementById('uploaded-files');
+
+            fileInput.addEventListener('change', function(e) {
+                handleFiles(e.target.files);
+            });
+
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                handleFiles(e.dataTransfer.files);
+            });
+
+            uploadArea.addEventListener('click', function(e) {
+                if (e.target === uploadArea || e.target.closest('.upload-icon') || e.target.closest('.upload-text')) {
+                    fileInput.click();
+                }
+            });
+        }
+
+        function handleFiles(files) {
+            const newFiles = Array.from(files);
+            selectedFiles = [...selectedFiles, ...newFiles];
+            displaySelectedFiles();
+        }
+
+        function displaySelectedFiles() {
+            const uploadedFiles = document.getElementById('uploaded-files');
+            
+            if (selectedFiles.length === 0) {
+                uploadedFiles.innerHTML = '';
+                return;
+            }
+
+            uploadedFiles.innerHTML = selectedFiles.map((file, index) => `
+                <div class="file-item">
+                    <div class="file-info">
+                        <div class="file-icon">
+                            <i class="fas fa-${getFileIcon(file.name)}"></i>
+                        </div>
+                        <div class="file-details">
+                            <div class="file-name">${file.name}</div>
+                            <div class="file-size">${formatFileSize(file.size)}</div>
+                        </div>
+                    </div>
+                    <div class="file-actions">
+                        <button type="button" class="action-btn btn-danger" onclick="removeFile(${index})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getFileIcon(filename) {
+            const extension = filename.split('.').pop().toLowerCase();
+            const iconMap = {
+                'pdf': 'file-pdf',
+                'doc': 'file-word',
+                'docx': 'file-word',
+                'txt': 'file-alt',
+                'jpg': 'file-image',
+                'jpeg': 'file-image',
+                'png': 'file-image',
+                'zip': 'file-archive',
+                'rar': 'file-archive'
+            };
+            return iconMap[extension] || 'file';
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            displaySelectedFiles();
+        }
+
+        async function submitAssignment() {
+            if (selectedFiles.length === 0) {
+                alert('Please select at least one file to submit.');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submit-btn');
+            const progressBar = document.getElementById('progress-bar');
+            const progressFill = document.getElementById('progress-fill');
+            const uploadStatus = document.getElementById('upload-status');
+
+            // Disable submit button and show progress
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            progressBar.style.display = 'block';
+            uploadStatus.style.display = 'block';
+            uploadStatus.textContent = 'Preparing submission...';
+
+            const formData = new FormData();
+            selectedFiles.forEach(file => {
+                formData.append('files', file);
+            });
+
+            const notes = document.getElementById('submission-notes').value;
+            if (notes) {
+                formData.append('notes', notes);
+            }
+
+            try {
+                const response = await fetch(`http://localhost:5000/api/assignments/${assignmentId}/submit`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('agrilearn_token')}`
+                    },
+                    body: formData
+                });
+
+                if (response.ok) {
+                    progressFill.style.width = '100%';
+                    uploadStatus.textContent = 'Submission completed successfully!';
+                    
+                    setTimeout(() => {
+                        alert('Assignment submitted successfully!');
+                        window.location.href = 'assignments.html';
+                    }, 1000);
+                } else {
+                    const error = await response.json();
+                    throw new Error(error.message || 'Failed to submit assignment');
+                }
+            } catch (error) {
+                console.error('Error submitting assignment:', error);
+                alert('Error submitting assignment: ' + error.message);
+                
+                // Reset button state
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Assignment';
+                progressBar.style.display = 'none';
+                uploadStatus.style.display = 'none';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('agrilearn_user');
+            localStorage.removeItem('agrilearn_token');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

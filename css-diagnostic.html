@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Diagnostic - AgriLearn</title>
+    <link rel="stylesheet" href="css/styles.css?v=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .diagnostic-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        
+        .test-result {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 2px solid #ddd;
+        }
+        
+        .test-result.pass {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        
+        .test-result.fail {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        
+        .test-result.loading {
+            background: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+        
+        .css-test-elements {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .inline-test {
+            background: red;
+            color: white;
+            padding: 10px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="diagnostic-container">
+        <h1>AgriLearn CSS Diagnostic Tool</h1>
+        <p>This page tests if CSS is loading properly across the application.</p>
+        
+        <div id="test-results">
+            <div class="test-result loading">
+                <h3>🔄 Running CSS Tests...</h3>
+                <p>Please wait while we check CSS loading status.</p>
+            </div>
+        </div>
+        
+        <div class="css-test-elements">
+            <h2>CSS Test Elements</h2>
+            
+            <div class="inline-test">
+                This should have red background (inline CSS test)
+            </div>
+            
+            <header class="app-header">
+                <div class="logo-container">
+                    <img src="images/hero-image.png" alt="AgriLearn Logo" class="logo">
+                    <h1>Test Header</h1>
+                </div>
+            </header>
+
+            <main class="main-content">
+                <div class="sidebar">
+                    <nav class="main-nav">
+                        <ul>
+                            <li class="active"><a href="#"><i class="fas fa-home"></i> Test Link</a></li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <div class="content">
+                    <div class="welcome-banner">
+                        <h2>Test Content Area</h2>
+                        <p>This should be styled if CSS is working.</p>
+                    </div>
+                    
+                    <div class="stats-container">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-book"></i></div>
+                            <div class="stat-content">
+                                <h3>Test</h3>
+                                <p>Stat Card</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        
+        <div id="detailed-results">
+            <!-- Detailed test results will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+        function runCSSTests() {
+            const results = [];
+            const testContainer = document.getElementById('test-results');
+            const detailedContainer = document.getElementById('detailed-results');
+            
+            // Test 1: Check if CSS file is accessible
+            fetch('/css/styles.css?v=1.0')
+                .then(response => {
+                    if (response.ok) {
+                        results.push({
+                            test: 'CSS File Accessibility',
+                            status: 'pass',
+                            message: `CSS file loaded successfully (Status: ${response.status})`
+                        });
+                    } else {
+                        results.push({
+                            test: 'CSS File Accessibility',
+                            status: 'fail',
+                            message: `CSS file failed to load (Status: ${response.status})`
+                        });
+                    }
+                    return response.text();
+                })
+                .then(cssContent => {
+                    // Test 2: Check CSS content
+                    if (cssContent && cssContent.includes('app-header')) {
+                        results.push({
+                            test: 'CSS Content Validation',
+                            status: 'pass',
+                            message: 'CSS content contains expected classes'
+                        });
+                    } else {
+                        results.push({
+                            test: 'CSS Content Validation',
+                            status: 'fail',
+                            message: 'CSS content missing or corrupted'
+                        });
+                    }
+                    
+                    runStyleTests();
+                })
+                .catch(error => {
+                    results.push({
+                        test: 'CSS File Accessibility',
+                        status: 'fail',
+                        message: `Error loading CSS: ${error.message}`
+                    });
+                    runStyleTests();
+                });
+            
+            function runStyleTests() {
+                // Test 3: Check computed styles
+                const header = document.querySelector('.app-header');
+                if (header) {
+                    const headerStyle = window.getComputedStyle(header);
+                    if (headerStyle.display === 'flex') {
+                        results.push({
+                            test: 'Header Styling',
+                            status: 'pass',
+                            message: 'Header has correct flex display'
+                        });
+                    } else {
+                        results.push({
+                            test: 'Header Styling',
+                            status: 'fail',
+                            message: `Header display is "${headerStyle.display}", expected "flex"`
+                        });
+                    }
+                }
+                
+                // Test 4: Check sidebar styling
+                const sidebar = document.querySelector('.sidebar');
+                if (sidebar) {
+                    const sidebarStyle = window.getComputedStyle(sidebar);
+                    if (sidebarStyle.width === '250px') {
+                        results.push({
+                            test: 'Sidebar Styling',
+                            status: 'pass',
+                            message: 'Sidebar has correct width'
+                        });
+                    } else {
+                        results.push({
+                            test: 'Sidebar Styling',
+                            status: 'fail',
+                            message: `Sidebar width is "${sidebarStyle.width}", expected "250px"`
+                        });
+                    }
+                }
+                
+                // Test 5: Check CSS variables
+                const rootStyle = window.getComputedStyle(document.documentElement);
+                const primaryColor = rootStyle.getPropertyValue('--primary-color').trim();
+                if (primaryColor === '#2e7d32') {
+                    results.push({
+                        test: 'CSS Variables',
+                        status: 'pass',
+                        message: 'CSS variables are working correctly'
+                    });
+                } else {
+                    results.push({
+                        test: 'CSS Variables',
+                        status: 'fail',
+                        message: `Primary color is "${primaryColor}", expected "#2e7d32"`
+                    });
+                }
+                
+                // Test 6: Check Font Awesome icons
+                const icon = document.querySelector('.fas.fa-home');
+                if (icon) {
+                    const iconStyle = window.getComputedStyle(icon, '::before');
+                    if (iconStyle.fontFamily.includes('Font Awesome')) {
+                        results.push({
+                            test: 'Font Awesome Icons',
+                            status: 'pass',
+                            message: 'Font Awesome icons are loading'
+                        });
+                    } else {
+                        results.push({
+                            test: 'Font Awesome Icons',
+                            status: 'fail',
+                            message: 'Font Awesome icons not loading properly'
+                        });
+                    }
+                }
+                
+                displayResults();
+            }
+            
+            function displayResults() {
+                const passCount = results.filter(r => r.status === 'pass').length;
+                const failCount = results.filter(r => r.status === 'fail').length;
+                
+                testContainer.innerHTML = `
+                    <div class="test-result ${failCount === 0 ? 'pass' : 'fail'}">
+                        <h3>${failCount === 0 ? '✅' : '❌'} CSS Test Results</h3>
+                        <p><strong>Passed:</strong> ${passCount} | <strong>Failed:</strong> ${failCount}</p>
+                        ${failCount === 0 ? 
+                            '<p>🎉 All CSS tests passed! Your styles should be loading correctly.</p>' : 
+                            '<p>⚠️ Some CSS tests failed. Check the detailed results below.</p>'
+                        }
+                    </div>
+                `;
+                
+                detailedContainer.innerHTML = `
+                    <h2>Detailed Test Results</h2>
+                    ${results.map(result => `
+                        <div class="test-result ${result.status}">
+                            <h4>${result.status === 'pass' ? '✅' : '❌'} ${result.test}</h4>
+                            <p>${result.message}</p>
+                        </div>
+                    `).join('')}
+                    
+                    <div class="test-result">
+                        <h4>🔧 Troubleshooting Tips</h4>
+                        <ul>
+                            <li>Try hard refresh (Ctrl+F5 or Cmd+Shift+R)</li>
+                            <li>Clear browser cache and cookies</li>
+                            <li>Check browser console for errors (F12)</li>
+                            <li>Verify server is running on port 5000</li>
+                            <li>Check if CSS file exists at /css/styles.css</li>
+                        </ul>
+                    </div>
+                `;
+            }
+        }
+        
+        // Run tests when page loads
+        window.addEventListener('load', runCSSTests);
+    </script>
+</body>
+</html>

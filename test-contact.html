@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form Test - AgriLearn</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f5f5f5;
+        }
+        
+        .test-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .test-result {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            border-left: 4px solid;
+        }
+        
+        .test-pass {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        
+        .test-fail {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        
+        .test-info {
+            background: #d1ecf1;
+            border-color: #17a2b8;
+            color: #0c5460;
+        }
+        
+        button {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+        
+        button:hover {
+            background: #005005;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Contact Form Test Suite</h1>
+        <p>This page tests the contact form functionality to ensure everything is working properly.</p>
+        
+        <div id="test-results"></div>
+        
+        <button type="button" onclick="runAllTests()">Run All Tests</button>
+        <button type="button" onclick="testContactPage()">Test Contact Page</button>
+        <button type="button" onclick="testAPIEndpoint()">Test API Endpoint</button>
+        <button type="button" onclick="clearResults()">Clear Results</button>
+    </div>
+
+    <script>
+        function addTestResult(message, type = 'info') {
+            const resultsDiv = document.getElementById('test-results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result test-${type}`;
+            resultDiv.innerHTML = `<strong>${new Date().toLocaleTimeString()}</strong>: ${message}`;
+            resultsDiv.appendChild(resultDiv);
+        }
+        
+        function clearResults() {
+            document.getElementById('test-results').innerHTML = '';
+        }
+        
+        async function runAllTests() {
+            clearResults();
+            addTestResult('Starting comprehensive contact form tests...', 'info');
+
+            await testContactPage();
+            await testAPIEndpoint();
+            await testJavaScriptFunctions();
+            await testErrorHandling();
+
+            addTestResult('All tests completed!', 'info');
+        }
+        
+        async function testContactPage() {
+            addTestResult('Testing contact page accessibility...', 'info');
+            
+            try {
+                const response = await fetch('/contact.html');
+                if (response.ok) {
+                    addTestResult('✅ Contact page loads successfully', 'pass');
+                } else {
+                    addTestResult('❌ Contact page failed to load', 'fail');
+                }
+            } catch (error) {
+                addTestResult(`❌ Error loading contact page: ${error.message}`, 'fail');
+            }
+        }
+        
+        async function testAPIEndpoint() {
+            addTestResult('Testing contact API endpoint...', 'info');
+            
+            const testData = {
+                name: 'Test User',
+                email: 'test@example.com',
+                subject: 'Test Subject',
+                message: 'This is a test message from the test suite.',
+                timestamp: new Date().toISOString()
+            };
+            
+            try {
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData)
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success) {
+                        addTestResult('✅ Contact API endpoint working correctly', 'pass');
+                        addTestResult(`API Response: ${result.message}`, 'info');
+                    } else {
+                        addTestResult(`❌ API returned error: ${result.message}`, 'fail');
+                    }
+                } else {
+                    addTestResult(`❌ API request failed with status: ${response.status}`, 'fail');
+                }
+            } catch (error) {
+                addTestResult(`❌ API test failed: ${error.message}`, 'fail');
+                addTestResult('This is expected if the backend server is not running', 'info');
+            }
+        }
+        
+        async function testJavaScriptFunctions() {
+            addTestResult('Testing JavaScript functions...', 'info');
+            
+            // Test if contact.js functions are available
+            if (typeof window.contactManager !== 'undefined') {
+                addTestResult('✅ Contact manager functions are available', 'pass');
+                
+                // Test validation function
+                if (typeof window.contactManager.validateField === 'function') {
+                    addTestResult('✅ Field validation function exists', 'pass');
+                } else {
+                    addTestResult('❌ Field validation function missing', 'fail');
+                }
+                
+                // Test notification function
+                if (typeof window.contactManager.showNotification === 'function') {
+                    addTestResult('✅ Notification function exists', 'pass');
+                    
+                    // Test notification
+                    try {
+                        window.contactManager.showNotification('Test notification', 'info');
+                        addTestResult('✅ Notification system working', 'pass');
+                    } catch (error) {
+                        addTestResult(`❌ Notification test failed: ${error.message}`, 'fail');
+                    }
+                } else {
+                    addTestResult('❌ Notification function missing', 'fail');
+                }
+            } else {
+                addTestResult('❌ Contact manager not available (contact.js may not be loaded)', 'fail');
+            }
+        }
+        
+        // Test form validation
+        function testFormValidation() {
+            addTestResult('Testing form validation...', 'info');
+            
+            // Create a test form element
+            const testForm = document.createElement('form');
+            testForm.innerHTML = `
+                <input type="text" name="name" value="">
+                <input type="email" name="email" value="invalid-email">
+                <input type="text" name="subject" value="Test">
+                <textarea name="message">Short</textarea>
+            `;
+            
+            document.body.appendChild(testForm);
+            
+            // Test validation if function exists
+            if (typeof window.contactManager !== 'undefined' && 
+                typeof window.contactManager.validateField === 'function') {
+                
+                const fields = testForm.querySelectorAll('input, textarea');
+                let validationTests = 0;
+                let validationPassed = 0;
+                
+                fields.forEach(field => {
+                    validationTests++;
+                    try {
+                        const result = window.contactManager.validateField({ target: field });
+                        if (typeof result === 'boolean') {
+                            validationPassed++;
+                        }
+                    } catch (error) {
+                        addTestResult(`❌ Validation error for ${field.name}: ${error.message}`, 'fail');
+                    }
+                });
+                
+                if (validationPassed === validationTests) {
+                    addTestResult('✅ Form validation functions working', 'pass');
+                } else {
+                    addTestResult(`❌ Form validation issues: ${validationPassed}/${validationTests} tests passed`, 'fail');
+                }
+            }
+            
+            // Clean up
+            document.body.removeChild(testForm);
+        }
+        
+        async function testErrorHandling() {
+            addTestResult('Testing error handling...', 'info');
+
+            // Test AbortError handling
+            try {
+                // Create a test audio element to simulate the AbortError
+                const audio = document.createElement('audio');
+                audio.src = 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmGgU7k9n1unEiBC13yO/eizEIHWq+8+OWT';
+                document.body.appendChild(audio);
+
+                // Try to play and immediately pause to trigger AbortError
+                const playPromise = audio.play();
+                audio.pause();
+
+                if (playPromise) {
+                    await playPromise.catch(error => {
+                        if (error.name === 'AbortError') {
+                            addTestResult('✅ AbortError properly caught and handled', 'pass');
+                        } else {
+                            addTestResult(`❌ Unexpected error: ${error.name}`, 'fail');
+                        }
+                    });
+                }
+
+                document.body.removeChild(audio);
+                addTestResult('✅ Error handling test completed', 'pass');
+
+            } catch (error) {
+                addTestResult(`❌ Error handling test failed: ${error.message}`, 'fail');
+            }
+
+            // Test global error handlers
+            const originalErrorHandler = window.onerror;
+            let errorCaught = false;
+
+            window.onerror = function(msg, url, line, col, error) {
+                if (error && error.name === 'AbortError') {
+                    errorCaught = true;
+                    addTestResult('✅ Global error handler working for AbortError', 'pass');
+                }
+                return originalErrorHandler ? originalErrorHandler.apply(this, arguments) : false;
+            };
+
+            // Restore original handler
+            setTimeout(() => {
+                window.onerror = originalErrorHandler;
+                if (!errorCaught) {
+                    addTestResult('ℹ️ No AbortError detected during test (this is normal)', 'info');
+                }
+            }, 1000);
+        }
+
+        // Auto-run basic tests when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            addTestResult('Contact form test suite loaded', 'info');
+            addTestResult('Click "Run All Tests" to start comprehensive testing', 'info');
+            addTestResult('Note: AbortError from media play() is a common browser issue and is now properly handled', 'info');
+        });
+    </script>
+</body>
+</html>

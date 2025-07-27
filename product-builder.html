@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Builder - AgriLearn</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/navigation.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="images/hero-image.png">
+    <style>
+        /* CSS Variables for consistency */
+        :root {
+            --primary-color: #2e7d32;
+            --primary-dark: #005005;
+            --primary-light: #66bb6a;
+            --text-color: #1f2937;
+            --text-light: #6b7280;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --border-radius: 8px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-50);
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            padding-left: 280px;
+            padding-top: 80px;
+        }
+
+        /* Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: white;
+            border-bottom: 1px solid var(--gray-200);
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+            padding: 0 2rem;
+            max-width: none;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .user-profile:hover {
+            background: var(--gray-50);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 0.9rem;
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--error-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            width: 280px;
+            height: calc(100vh - 80px);
+            background: var(--primary-color);
+            overflow-y: auto;
+            z-index: 999;
+        }
+
+        .sidebar-content {
+            padding: 1rem 0;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+            position: relative;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .sidebar-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-left-color: white;
+        }
+
+        .sidebar-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-text {
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .nav-badge {
+            background: var(--error-color);
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 10px;
+            margin-left: auto;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            min-height: calc(100vh - 80px);
+            background: var(--gray-50);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+            background: linear-gradient(135deg, var(--primary-color), #1b5e20);
+            border-radius: 16px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .page-header h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+            font-weight: 700;
+        }
+
+        .page-header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+            margin: 0;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .builder-container {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .builder-form {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--gray-200);
+        }
+
+        .preview-panel {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--gray-200);
+            position: sticky;
+            top: 2rem;
+            height: fit-content;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-group input:hover,
+        .form-group select:hover,
+        .form-group textarea:hover {
+            border-color: var(--gray-400);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .image-upload {
+            border: 2px dashed var(--gray-300);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            transition: border-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .image-upload:hover {
+            border-color: var(--primary-color);
+        }
+
+        .image-upload.dragover {
+            border-color: var(--primary-color);
+            background: rgba(46, 125, 50, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--gray-400);
+            margin-bottom: 1rem;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: var(--border-radius);
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 0.875rem 1.75rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), #1b5e20);
+            color: white;
+            box-shadow: 0 2px 4px rgba(46, 125, 50, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1b5e20, var(--primary-color));
+            box-shadow: 0 6px 16px rgba(46, 125, 50, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--text-color);
+            border: 2px solid var(--gray-200);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-300);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-color), #059669);
+            color: white;
+            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #059669, var(--success-color));
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .preview-card {
+            border: 1px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            background: white;
+        }
+
+        .preview-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: var(--gray-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-400);
+        }
+
+        .preview-content {
+            padding: 1rem;
+        }
+
+        .preview-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .preview-price {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .preview-description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .preview-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-200);
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .notification {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            border-radius: var(--border-radius);
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification.success {
+            background: var(--success-color);
+        }
+
+        .notification.error {
+            background: var(--error-color);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            body {
+                padding-left: 0;
+            }
+
+            .mobile-menu-toggle {
+                display: block !important;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                z-index: 1001;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .sidebar-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 1000;
+                display: none;
+            }
+
+            .sidebar-overlay.show {
+                display: block;
+            }
+
+            .builder-container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .preview-panel {
+                position: static;
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header-content {
+                padding: 0 1rem;
+            }
+
+            .logo-text {
+                display: none;
+            }
+
+            .user-name {
+                display: none;
+            }
+
+            .logout-btn span {
+                display: none;
+            }
+
+            .builder-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .preview-panel {
+                position: static;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .builder-form,
+            .preview-panel {
+                padding: 1.5rem;
+            }
+
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                padding: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-left">
+                <button type="button" class="mobile-menu-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="logo">
+                    <img src="images/hero-image.png" alt="AgriLearn" class="logo-img">
+                    <span class="logo-text">AgriLearn</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <img src="images/default-avatar.png" alt="User Avatar" class="user-avatar">
+                    <div class="user-info">
+                        <div class="user-name">NANSHIE ROMUALD</div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-content">
+            <a href="teacher-dashboard.html" class="sidebar-item">
+                <i class="fas fa-tachometer-alt"></i>
+                <span class="sidebar-text">Dashboard</span>
+            </a>
+            <a href="courses.html" class="sidebar-item">
+                <i class="fas fa-book"></i>
+                <span class="sidebar-text">My Courses</span>
+            </a>
+            <a href="students.html" class="sidebar-item">
+                <i class="fas fa-users"></i>
+                <span class="sidebar-text">Students</span>
+            </a>
+            <a href="assignments.html" class="sidebar-item">
+                <i class="fas fa-tasks"></i>
+                <span class="sidebar-text">Assignments</span>
+                <span class="nav-badge" id="badge-assignments">2</span>
+            </a>
+            <a href="projects.html" class="sidebar-item">
+                <i class="fas fa-project-diagram"></i>
+                <span class="sidebar-text">Projects</span>
+            </a>
+
+            <a href="messages.html" class="sidebar-item">
+                <i class="fas fa-envelope"></i>
+                <span class="sidebar-text">Messages</span>
+                <span class="nav-badge" id="badge-messages">3</span>
+            </a>
+            <a href="marketplace.html" class="sidebar-item">
+                <i class="fas fa-store"></i>
+                <span class="sidebar-text">Marketplace</span>
+            </a>
+            <a href="product-builder.html" class="sidebar-item active">
+                <i class="fas fa-plus-circle"></i>
+                <span class="sidebar-text">Build Product</span>
+            </a>
+            <a href="profile.html" class="sidebar-item">
+                <i class="fas fa-user"></i>
+                <span class="sidebar-text">Profile</span>
+            </a>
+            <a href="about.html" class="sidebar-item">
+                <i class="fas fa-info-circle"></i>
+                <span class="sidebar-text">About</span>
+            </a>
+            <a href="settings.html" class="sidebar-item">
+                <i class="fas fa-cog"></i>
+                <span class="sidebar-text">Settings</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1><i class="fas fa-hammer"></i> Product Builder</h1>
+                <p>Create and customize your agricultural products for the marketplace</p>
+            </div>
+
+        <div class="builder-container">
+            <!-- Product Builder Form -->
+            <div class="builder-form">
+                <form id="productForm">
+                    <!-- Basic Information -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-info-circle"></i>
+                            Basic Information
+                        </h3>
+                        
+                        <div class="form-group">
+                            <label for="productName">Product Name *</label>
+                            <input type="text" id="productName" name="productName" required 
+                                   placeholder="Enter product name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="category">Category *</label>
+                            <select id="category" name="category" required>
+                                <option value="">Select a category</option>
+                                <option value="seeds">Seeds</option>
+                                <option value="tools">Tools</option>
+                                <option value="fertilizers">Fertilizers</option>
+                                <option value="equipment">Equipment</option>
+                                <option value="organic">Organic Products</option>
+                                <option value="livestock">Livestock</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Description *</label>
+                            <textarea id="description" name="description" required 
+                                      placeholder="Describe your product in detail..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Pricing & Stock -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-dollar-sign"></i>
+                            Pricing & Stock
+                        </h3>
+                        
+                        <div class="form-group">
+                            <label for="price">Price ($) *</label>
+                            <input type="number" id="price" name="price" step="0.01" min="0" required 
+                                   placeholder="0.00">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="originalPrice">Original Price ($)</label>
+                            <input type="number" id="originalPrice" name="originalPrice" step="0.01" min="0" 
+                                   placeholder="Leave empty if no discount">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="stockQuantity">Stock Quantity *</label>
+                            <input type="number" id="stockQuantity" name="stockQuantity" min="0" required 
+                                   placeholder="Available quantity">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Preview Panel -->
+            <div class="preview-panel">
+                <h3 class="section-title">
+                    <i class="fas fa-eye"></i>
+                    Live Preview
+                </h3>
+                
+                <div class="preview-card" id="previewCard">
+                    <div class="preview-image" id="previewImage">
+                        <i class="fas fa-image"></i>
+                        <span>No image uploaded</span>
+                    </div>
+                    <div class="preview-content">
+                        <div class="preview-title" id="previewTitle">Product Name</div>
+                        <div class="preview-price" id="previewPrice">$0.00</div>
+                        <div class="preview-description" id="previewDescription">Product description will appear here...</div>
+                        <div class="preview-meta">
+                            <span id="previewCategory">Category</span>
+                            <span id="previewStock">0 in stock</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+            <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                <i class="fas fa-undo"></i>
+                Reset
+            </button>
+            <button type="button" class="btn btn-primary" onclick="saveAsDraft()">
+                <i class="fas fa-save"></i>
+                Save as Draft
+            </button>
+            <button type="button" class="btn btn-success" onclick="publishProduct()">
+                <i class="fas fa-rocket"></i>
+                Publish to Marketplace
+            </button>
+        </div>
+        </div>
+    </main>
+
+    <script src="js/product-builder.js"></script>
+</body>
+</html>

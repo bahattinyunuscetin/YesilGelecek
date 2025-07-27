@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Assignments - AgriLearn</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/navigation.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="icon" href="images/hero-image.png" />
+  <style>
+    /* Professional Student Assignments Styles */
+    :root {
+      --primary-color: #2e7d32;
+      --primary-light: #4caf50;
+      --primary-dark: #1b5e20;
+      --secondary-color: #ff9800;
+      --success-color: #4caf50;
+      --warning-color: #ff9800;
+      --danger-color: #f44336;
+      --info-color: #2196f3;
+      --text-color: #333;
+      --text-light: #666;
+      --bg-light: #f8f9fa;
+      --white: #ffffff;
+      --shadow: 0 2px 10px rgba(0,0,0,0.1);
+      --shadow-hover: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    .assignments-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: var(--bg-light);
+      min-height: 100vh;
+    }
+
+    /* Page Header */
+    .page-header {
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+      color: white;
+      padding: 2rem;
+      border-radius: 16px;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 150px;
+      height: 150px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      transform: translate(30px, -30px);
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-info h1 {
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .header-info p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .header-stats {
+      display: flex;
+      gap: 2rem;
+      text-align: center;
+    }
+
+    .header-stat {
+      background: rgba(255,255,255,0.2);
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+    }
+
+    .header-stat-number {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+    }
+
+    .header-stat-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* Filter Section */
+    .filter-section {
+      background: var(--white);
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow);
+    }
+
+    .filter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .filter-controls {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .filter-group label {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-color);
+    }
+
+    .filter-select,
+    .filter-input {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      min-width: 150px;
+    }
+
+    .filter-select:focus,
+    .filter-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    .clear-filters-btn {
+      background: var(--text-light);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .clear-filters-btn:hover {
+      background: var(--text-color);
+    }
+
+    /* Assignments Grid */
+    .assignments-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .assignment-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      border-left: 4px solid var(--primary-color);
+    }
+
+    .assignment-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    .assignment-card.urgent {
+      border-left-color: var(--danger-color);
+    }
+
+    .assignment-card.submitted {
+      border-left-color: var(--success-color);
+    }
+
+    .assignment-card.overdue {
+      border-left-color: var(--danger-color);
+      background: rgba(244, 67, 54, 0.02);
+    }
+
+    .assignment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .assignment-info h3 {
+      color: var(--text-color);
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .assignment-course {
+      color: var(--primary-color);
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .assignment-instructor {
+      color: var(--text-light);
+      font-size: 0.8rem;
+    }
+
+    .assignment-status {
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .status-pending {
+      background: rgba(255, 152, 0, 0.1);
+      color: var(--warning-color);
+    }
+
+    .status-submitted {
+      background: rgba(76, 175, 80, 0.1);
+      color: var(--success-color);
+    }
+
+    .status-graded {
+      background: rgba(33, 150, 243, 0.1);
+      color: var(--info-color);
+    }
+
+    .status-overdue {
+      background: rgba(244, 67, 54, 0.1);
+      color: var(--danger-color);
+    }
+
+    .assignment-description {
+      color: var(--text-light);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+
+    .assignment-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      background: var(--bg-light);
+      border-radius: 8px;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    .meta-item i {
+      color: var(--primary-color);
+    }
+
+    .assignment-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+    }
+
+    .action-btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: var(--text-light);
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: var(--text-color);
+    }
+
+    .btn-success {
+      background: var(--success-color);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #388e3c;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-light);
+    }
+
+    .empty-state i {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      color: var(--text-light);
+    }
+
+    .empty-state h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-color);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .assignments-container {
+        padding: 1rem;
+      }
+
+      .page-header {
+        padding: 1.5rem;
+      }
+
+      .header-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+
+      .header-stats {
+        gap: 1rem;
+      }
+
+      .filter-controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .filter-group {
+        width: 100%;
+      }
+
+      .assignment-header {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .assignment-actions {
+        justify-content: stretch;
+      }
+
+      .action-btn {
+        flex: 1;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="header-left">
+        <button type="button" class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle Sidebar">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="logo-container">
+          <img src="images/hero-image.png" alt="AgriLearn Logo" class="logo">
+          <h1>AgriLearn</h1>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="user-avatar">
+          <img src="images/pic-1.jpg" alt="Student Avatar" />
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Student Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <a href="student-dashboard.html" class="sidebar-brand">
+        <i class="fas fa-leaf"></i>
+        <span>AgriLearn</span>
+      </a>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="student-dashboard.html" class="sidebar-item">
+        <i class="fas fa-home"></i>
+        <span class="sidebar-text">Dashboard</span>
+      </a>
+      <a href="courses.html" class="sidebar-item">
+        <i class="fas fa-book"></i>
+        <span class="sidebar-text">My Courses</span>
+      </a>
+      <a href="student-assignments.html" class="sidebar-item active">
+        <i class="fas fa-tasks"></i>
+        <span class="sidebar-text">Assignments</span>
+      </a>
+      <a href="student-projects.html" class="sidebar-item">
+        <i class="fas fa-project-diagram"></i>
+        <span class="sidebar-text">Projects</span>
+      </a>
+      <a href="certificates.html" class="sidebar-item">
+        <i class="fas fa-certificate"></i>
+        <span class="sidebar-text">Certificates</span>
+      </a>
+      <a href="marketplace.html" class="sidebar-item">
+        <i class="fas fa-store"></i>
+        <span class="sidebar-text">Marketplace</span>
+      </a>
+      <a href="profile.html" class="sidebar-item">
+        <i class="fas fa-user"></i>
+        <span class="sidebar-text">Profile</span>
+      </a>
+      <a href="about.html" class="sidebar-item">
+        <i class="fas fa-info-circle"></i>
+        <span class="sidebar-text">About</span>
+      </a>
+      <a href="settings.html" class="sidebar-item">
+        <i class="fas fa-cog"></i>
+        <span class="sidebar-text">Settings</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user-info">
+        <i class="fas fa-user-circle"></i>
+        <div>
+          <div class="user-role">Student</div>
+          <div class="user-name" id="sidebar-user-name">Loading...</div>
+        </div>
+      </div>
+      <button type="button" class="logout-btn" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content Wrapper -->
+  <div class="main-wrapper">
+    <main class="main-content">
+      <div class="assignments-container">
+        <!-- Page Header -->
+        <div class="page-header">
+          <div class="header-content">
+            <div class="header-info">
+              <h1>My Assignments</h1>
+              <p>Track your assignments, deadlines, and submissions</p>
+            </div>
+            <div class="header-stats">
+              <div class="header-stat">
+                <div class="header-stat-number" id="total-assignments">12</div>
+                <div class="header-stat-label">Total</div>
+              </div>
+              <div class="header-stat">
+                <div class="header-stat-number" id="pending-assignments">4</div>
+                <div class="header-stat-label">Pending</div>
+              </div>
+              <div class="header-stat">
+                <div class="header-stat-number" id="submitted-assignments">6</div>
+                <div class="header-stat-label">Submitted</div>
+              </div>
+              <div class="header-stat">
+                <div class="header-stat-number" id="graded-assignments">2</div>
+                <div class="header-stat-label">Graded</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+          <div class="filter-header">
+            <h3><i class="fas fa-filter"></i> Filter Assignments</h3>
+            <button type="button" class="clear-filters-btn" onclick="clearFilters()">
+              <i class="fas fa-times"></i> Clear Filters
+            </button>
+          </div>
+          <div class="filter-controls">
+            <div class="filter-group">
+              <label for="status-filter">Status</label>
+              <select id="status-filter" class="filter-select" onchange="filterAssignments()">
+                <option value="">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="submitted">Submitted</option>
+                <option value="graded">Graded</option>
+                <option value="overdue">Overdue</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="course-filter">Course</label>
+              <select id="course-filter" class="filter-select" onchange="filterAssignments()">
+                <option value="">All Courses</option>
+                <option value="sustainable-agriculture">Sustainable Agriculture</option>
+                <option value="organic-farming">Organic Farming</option>
+                <option value="plant-breeding">Plant Breeding</option>
+                <option value="soil-science">Soil Science</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="search-filter">Search</label>
+              <input type="text" id="search-filter" class="filter-input" placeholder="Search assignments..." onkeyup="filterAssignments()">
+            </div>
+          </div>
+        </div>
+
+        <!-- Assignments Grid -->
+        <div class="assignments-grid" id="assignments-container">
+          <!-- Urgent Assignment -->
+          <div class="assignment-card urgent" data-status="pending" data-course="sustainable-agriculture">
+            <div class="assignment-header">
+              <div class="assignment-info">
+                <h3>Soil Analysis Report</h3>
+                <div class="assignment-course">Sustainable Agriculture Practices</div>
+                <div class="assignment-instructor">Dr. Sarah Johnson</div>
+              </div>
+              <div class="assignment-status status-pending">Pending</div>
+            </div>
+            <div class="assignment-description">
+              Conduct a comprehensive soil analysis of your local area and prepare a detailed report on soil composition, pH levels, and nutrient content. Include recommendations for soil improvement.
+            </div>
+            <div class="assignment-meta">
+              <div class="meta-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Due: Tomorrow, 11:59 PM</span>
+              </div>
+              <div class="meta-item">
+                <i class="fas fa-clock"></i>
+                <span>Estimated: 4 hours</span>
+              </div>
+              <div class="meta-item">
+                <i class="fas fa-star"></i>
+                <span>100 points</span>
+              </div>
+            </div>
+            <div class="assignment-actions">
+              <a href="assignment-details.html?id=1" class="action-btn btn-secondary">
+                <i class="fas fa-eye"></i> View Details
+              </a>
+              <a href="assignment-submit.html?id=1" class="action-btn btn-primary">
+                <i class="fas fa-upload"></i> Submit Assignment
+              </a>
+            </div>
+          </div>
+
+          <!-- Submitted Assignment -->
+          <div class="assignment-card submitted" data-status="submitted" data-course="organic-farming">
+            <div class="assignment-header">
+              <div class="assignment-info">
+                <h3>Organic Pest Control Methods</h3>
+                <div class="assignment-course">Organic Farming Fundamentals</div>
+                <div class="assignment-instructor">Prof. Michael Chen</div>
+              </div>
+              <div class="assignment-status status-submitted">Submitted</div>
+            </div>
+            <div class="assignment-description">
+              Research and document various organic pest control methods. Create a comprehensive guide with practical applications and effectiveness analysis.
+            </div>
+            <div class="assignment-meta">
+              <div class="meta-item">
+                <i class="fas fa-calendar-check"></i>
+                <span>Submitted: 2 days ago</span>
+              </div>
+              <div class="meta-item">
+                <i class="fas fa-clock"></i>
+                <span>Estimated: 3 hours</span>
+              </div>
+              <div class="meta-item">
+                <i class="fas fa-star"></i>
+                <span>75 points</span>
+              </div>
+            </div>
+            <div class="assignment-actions">
+              <a href="assignment-details.html?id=2" class="action-btn btn-secondary">
+                <i class="fas fa-eye"></i> View Details
+              </a>
+              <a href="assignment-submission.html?id=2" class="action-btn btn-success">
+                <i class="fas fa-file-alt"></i> View Submission
+              </a>
+            </div>
+          </div>
+
+          <!-- Graded Assignment -->
+          <div class="assignment-card" data-status="graded" data-course="plant-breeding">
+            <div class="assignment-header">
+              <div class="assignment-info">
+                <h3>Plant Breeding Techniques Essay</h3>
+                <div class="assignment-course">Plant Breeding Techniques</div>
+                <div class="assignment-instructor">Dr. Emily Rodriguez</div>
+              </div>
+              <div class="assignment-status status-graded">Graded</div>
+            </div>
+            <div class="assignment-description">
+              Write a comprehensive essay on modern plant breeding techniques, including traditional methods and biotechnology applications.
+            </div>
+            <div class="assignment-meta">
+              <div class="meta-item">
+                <i class="fas fa-trophy"></i>
+                <span>Grade: 92/100</span>
+              </div>
+              <div class="meta-item">
+                <i class="fas fa-clock"></i>
+                <span>Estimated: 5 hours</span>
+              </div>
+              <div class="meta-item">
+                <i class="fas fa-star"></i>
+                <span>100 points</span>
+              </div>
+            </div>
+            <div class="assignment-actions">
+              <a href="assignment-details.html?id=3" class="action-btn btn-secondary">
+                <i class="fas fa-eye"></i> View Details
+              </a>
+              <a href="assignment-feedback.html?id=3" class="action-btn btn-primary">
+                <i class="fas fa-comments"></i> View Feedback
+              </a>
+            </div>
+          </div>
+
+          <!-- Regular Assignment -->
+          <div class="assignment-card" data-status="pending" data-course="soil-science">
+            <div class="assignment-header">
+              <div class="assignment-info">
+                <h3>Soil Microorganism Study</h3>
+                <div class="assignment-course">Soil Science Fundamentals</div>
+                <div class="assignment-instructor">Prof. David Kim</div>
+              </div>
+              <div class="assignment-status status-pending">Pending</div>
+            </div>
+            <div class="assignment-description">
+              Investigate the role of microorganisms in soil health. Prepare a presentation on beneficial bacteria and fungi in agricultural systems.
+            </div>
+            <div class="assignment-meta">
+              <div class="meta-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Due: In 5 days</span>
+              </div>
+              <div class="meta-item">
+                <i class="fas fa-clock"></i>
+                <span>Estimated: 6 hours</span>
+              </div>
+              <div class="meta-item">
+                <i class="fas fa-star"></i>
+                <span>150 points</span>
+              </div>
+            </div>
+            <div class="assignment-actions">
+              <a href="assignment-details.html?id=4" class="action-btn btn-secondary">
+                <i class="fas fa-eye"></i> View Details
+              </a>
+              <a href="assignment-submit.html?id=4" class="action-btn btn-primary">
+                <i class="fas fa-upload"></i> Submit Assignment
+              </a>
+            </div>
+          </div>
+
+          <!-- Overdue Assignment -->
+          <div class="assignment-card overdue" data-status="overdue" data-course="sustainable-agriculture">
+            <div class="assignment-header">
+              <div class="assignment-info">
+                <h3>Water Conservation Project</h3>
+                <div class="assignment-course">Sustainable Agriculture Practices</div>
+                <div class="assignment-instructor">Dr. Sarah Johnson</div>
+              </div>
+              <div class="assignment-status status-overdue">Overdue</div>
+            </div>
+            <div class="assignment-description">
+              Design a water conservation system for a small farm. Include technical drawings, cost analysis, and implementation timeline.
+            </div>
+            <div class="assignment-meta">
+              <div class="meta-item">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>Overdue by 2 days</span>
+              </div>
+              <div class="meta-item">
+                <i class="fas fa-clock"></i>
+                <span>Estimated: 8 hours</span>
+              </div>
+              <div class="meta-item">
+                <i class="fas fa-star"></i>
+                <span>200 points</span>
+              </div>
+            </div>
+            <div class="assignment-actions">
+              <a href="assignment-details.html?id=5" class="action-btn btn-secondary">
+                <i class="fas fa-eye"></i> View Details
+              </a>
+              <a href="assignment-submit.html?id=5" class="action-btn btn-primary">
+                <i class="fas fa-upload"></i> Submit Late
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty State (hidden by default) -->
+        <div class="empty-state" id="empty-state" style="display: none;">
+          <i class="fas fa-tasks"></i>
+          <h3>No assignments found</h3>
+          <p>Try adjusting your filters or check back later for new assignments.</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/sidebar.js"></script>
+  <script>
+    // Student Assignments Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load user data
+      const user = JSON.parse(localStorage.getItem('agrilearn_user') || '{}');
+      const userName = user.name || 'Student';
+
+      // Update user name display
+      document.getElementById('sidebar-user-name').textContent = userName;
+
+      // Initialize assignment statistics
+      updateAssignmentStats();
+
+      // Initialize filters
+      initializeFilters();
+    });
+
+    function updateAssignmentStats() {
+      const assignments = document.querySelectorAll('.assignment-card');
+      const pending = document.querySelectorAll('[data-status="pending"]').length;
+      const submitted = document.querySelectorAll('[data-status="submitted"]').length;
+      const graded = document.querySelectorAll('[data-status="graded"]').length;
+      const overdue = document.querySelectorAll('[data-status="overdue"]').length;
+
+      document.getElementById('total-assignments').textContent = assignments.length;
+      document.getElementById('pending-assignments').textContent = pending + overdue;
+      document.getElementById('submitted-assignments').textContent = submitted;
+      document.getElementById('graded-assignments').textContent = graded;
+    }
+
+    function initializeFilters() {
+      // Set up filter event listeners
+      const statusFilter = document.getElementById('status-filter');
+      const courseFilter = document.getElementById('course-filter');
+      const searchFilter = document.getElementById('search-filter');
+
+      statusFilter.addEventListener('change', filterAssignments);
+      courseFilter.addEventListener('change', filterAssignments);
+      searchFilter.addEventListener('input', filterAssignments);
+    }
+
+    function filterAssignments() {
+      const statusFilter = document.getElementById('status-filter').value;
+      const courseFilter = document.getElementById('course-filter').value;
+      const searchFilter = document.getElementById('search-filter').value.toLowerCase();
+
+      const assignments = document.querySelectorAll('.assignment-card');
+      let visibleCount = 0;
+
+      assignments.forEach(assignment => {
+        const status = assignment.getAttribute('data-status');
+        const course = assignment.getAttribute('data-course');
+        const title = assignment.querySelector('h3').textContent.toLowerCase();
+        const description = assignment.querySelector('.assignment-description').textContent.toLowerCase();
+
+        let showAssignment = true;
+
+        // Filter by status
+        if (statusFilter && status !== statusFilter) {
+          showAssignment = false;
+        }
+
+        // Filter by course
+        if (courseFilter && course !== courseFilter) {
+          showAssignment = false;
+        }
+
+        // Filter by search term
+        if (searchFilter && !title.includes(searchFilter) && !description.includes(searchFilter)) {
+          showAssignment = false;
+        }
+
+        if (showAssignment) {
+          assignment.style.display = 'block';
+          visibleCount++;
+        } else {
+          assignment.style.display = 'none';
+        }
+      });
+
+      // Show/hide empty state
+      const emptyState = document.getElementById('empty-state');
+      if (visibleCount === 0) {
+        emptyState.style.display = 'block';
+      } else {
+        emptyState.style.display = 'none';
+      }
+    }
+
+    function clearFilters() {
+      document.getElementById('status-filter').value = '';
+      document.getElementById('course-filter').value = '';
+      document.getElementById('search-filter').value = '';
+
+      // Show all assignments
+      const assignments = document.querySelectorAll('.assignment-card');
+      assignments.forEach(assignment => {
+        assignment.style.display = 'block';
+      });
+
+      // Hide empty state
+      document.getElementById('empty-state').style.display = 'none';
+    }
+
+    function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        localStorage.removeItem('agrilearn_user');
+        localStorage.removeItem('agrilearn_token');
+        window.location.href = 'login.html';
+      }
+    }
+
+    // Add click handlers for assignment actions
+    document.querySelectorAll('.action-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        // For demo purposes, show alert for non-existent pages
+        const href = this.getAttribute('href');
+        if (href.includes('assignment-details.html') ||
+            href.includes('assignment-submit.html') ||
+            href.includes('assignment-submission.html') ||
+            href.includes('assignment-feedback.html')) {
+          e.preventDefault();
+
+          const action = this.textContent.trim();
+          showNotification(`${action} functionality will be implemented soon!`, 'info');
+        }
+      });
+    });
+
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 8px;
+        color: white;
+        font-weight: 500;
+        z-index: 9999;
+        max-width: 300px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        background: ${type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : '#2196f3'};
+      `;
+      notification.innerHTML = `
+        <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+        ${message}
+      `;
+
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
+        if (document.body.contains(notification)) {
+          document.body.removeChild(notification);
+        }
+      }, 5000);
+    }
+
+    // Add smooth scrolling for better UX
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

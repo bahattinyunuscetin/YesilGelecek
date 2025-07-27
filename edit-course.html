@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Course - AgriLearn</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="icon" type="image/png" href="images/icon-leaf.png"/>
+</head>
+<body>
+  <header class="app-header">
+    <div class="logo-container">
+      <img src="images/hero-image.png" alt="AgriLearn Logo" class="logo" />
+      <h1>AgriLearn</h1>
+    </div>
+    <div class="user-menu">
+      <button onclick="logout()" class="btn btn-sm btn-outline">Logout</button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="content">
+      <h2>Edit Course</h2>
+      <form id="editCourseForm">
+        <div class="form-group">
+          <label for="titleInput">Course Title</label>
+          <input type="text" id="titleInput" name="title" required>
+        </div>
+        <div class="form-group">
+          <label for="imageInput">Image URL</label>
+          <input type="text" id="imageInput" name="image" required>
+        </div>
+        <div class="form-group">
+          <label for="descInput">Description</label>
+          <textarea id="descInput" name="description" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </form>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="mobile-nav">
+      <a href="teacher-dashboard.html" class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
+      <a href="my-courses.html" class="nav-item active"><i class="fas fa-book"></i><span>Courses</span></a>
+      <a href="students.html" class="nav-item"><i class="fas fa-users"></i><span>Students</span></a>
+      <a href="profile.html" class="nav-item"><i class="fas fa-user"></i><span>Profile</span></a>
+    </div>
+  </footer>
+
+<script src="js/edit-course.js"></script>
+  <script>
+    // Ensure logout is accessible if button calls it directly
+    function logout() {
+      localStorage.removeItem('agrilearn_token');
+      localStorage.removeItem('agrilearn_user');
+      window.location.href = 'login.html'; // Or your actual login page
+    }
+  </script>
+</body>
+</html>

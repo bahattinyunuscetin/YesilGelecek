@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - AgriLearn</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="images/hero-image.png">
+    <style>
+        .about-hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .about-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .about-hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .about-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        
+        .about-section {
+            margin-bottom: 4rem;
+        }
+        
+        .about-section h2 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .about-section h3 {
+            color: var(--text-dark);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .about-section p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-gray);
+            margin-bottom: 1.5rem;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-card i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card h4 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 2rem;
+            background: var(--gray-50);
+            border-radius: 12px;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--text-gray);
+            margin-top: 0.5rem;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .team-member {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .team-member img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+        }
+        
+        .team-member h4 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+        
+        .team-member .role {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .team-member p {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+        
+        .cta-section {
+            background: var(--gray-50);
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+        
+        .cta-section h2 {
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+        
+        .cta-section p {
+            font-size: 1.1rem;
+            color: var(--text-gray);
+            margin-bottom: 2rem;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        @media (max-width: 768px) {
+            .about-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .about-hero p {
+                font-size: 1rem;
+            }
+            
+            .about-content {
+                padding: 2rem 1rem;
+            }
+            
+            .about-section h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="landing-header">
+        <div class="logo-container">
+            <img src="images/hero-image.png" alt="AgriLearn Logo" class="logo">
+            <h1>AgriLearn</h1>
+        </div>
+        <nav class="nav-menu">
+            <a href="index.html">Home</a>
+            <a href="about.html" class="active">About</a>
+            <a href="courses.html">Courses</a>
+            <a href="marketplace.html">Marketplace</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+        <div class="auth-buttons">
+            <a href="login.html" class="btn btn-outline">Login</a>
+            <a href="signup.html" class="btn btn-primary">Sign Up</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="about-hero">
+        <div class="container">
+            <h1>About AgriLearn</h1>
+            <p>Empowering the next generation of agricultural professionals through innovative education and hands-on learning experiences.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="about-content">
+        <!-- Mission Section -->
+        <section class="about-section">
+            <h2>Our Mission</h2>
+            <p>At AgriLearn, we believe that sustainable agriculture is the key to feeding our growing world population while protecting our planet. Our mission is to provide comprehensive, accessible, and practical agricultural education that bridges the gap between traditional farming knowledge and modern agricultural technology.</p>
+            
+            <p>We are committed to creating a learning environment where students, farmers, and agricultural professionals can develop the skills, knowledge, and confidence needed to tackle the challenges of modern agriculture and contribute to a more sustainable future.</p>
+        </section>
+
+        <!-- Platform Features -->
+        <section class="about-section">
+            <h2>Platform Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h4>Expert-Led Courses</h4>
+                    <p>Learn from industry professionals and academic experts with years of practical experience in agriculture and farming.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-hands-helping"></i>
+                    <h4>Hands-On Projects</h4>
+                    <p>Apply your knowledge through real-world projects and assignments that simulate actual farming scenarios.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-users"></i>
+                    <h4>Community Learning</h4>
+                    <p>Connect with fellow learners, share experiences, and collaborate on agricultural challenges and solutions.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-certificate"></i>
+                    <h4>Certification Programs</h4>
+                    <p>Earn recognized certificates that validate your agricultural knowledge and enhance your professional credentials.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h4>Mobile Learning</h4>
+                    <p>Access courses and materials anywhere, anytime with our responsive platform designed for all devices.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h4>Progress Tracking</h4>
+                    <p>Monitor your learning journey with detailed analytics and personalized recommendations for improvement.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Statistics -->
+        <section class="about-section">
+            <h2>Our Impact</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">10,000+</span>
+                    <div class="stat-label">Students Enrolled</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">500+</span>
+                    <div class="stat-label">Courses Available</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">150+</span>
+                    <div class="stat-label">Expert Instructors</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">50+</span>
+                    <div class="stat-label">Countries Reached</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section class="about-section">
+            <h2>Meet Our Team</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="images/pic-1.jpg" alt="Dr. Sarah Johnson" onerror="this.src='images/hero-image.png'">
+                    <h4>Dr. Sarah Johnson</h4>
+                    <div class="role">Founder & CEO</div>
+                    <p>Agricultural scientist with 20+ years of experience in sustainable farming practices and educational technology.</p>
+                </div>
+                <div class="team-member">
+                    <img src="images/colaborator.webp" alt="Prof. Michael Chen" onerror="this.src='images/pic-1.jpg'">
+                    <h4>Prof. Michael Chen</h4>
+                    <div class="role">Chief Academic Officer</div>
+                    <p>Former university professor specializing in crop science and agricultural innovation with extensive research background.</p>
+                </div>
+                <div class="team-member">
+                    <img src="images/teacher-instruction.jpg" alt="Emily Rodriguez" onerror="this.src='images/pic-1.jpg'">
+                    <h4>Emily Rodriguez</h4>
+                    <div class="role">Head of Technology</div>
+                    <p>Software engineer passionate about creating accessible educational platforms for agricultural communities worldwide.</p>
+                </div>
+                <div class="team-member">
+                    <img src="images/student-learning.jpg" alt="James Thompson" onerror="this.src='images/pic-1.jpg'">
+                    <h4>James Thompson</h4>
+                    <div class="role">Community Manager</div>
+                    <p>Agricultural extension specialist focused on building connections between farmers, students, and agricultural professionals.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Values Section -->
+        <section class="about-section">
+            <h2>Our Values</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-leaf"></i>
+                    <h4>Sustainability</h4>
+                    <p>We promote environmentally responsible farming practices that preserve our planet for future generations.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-lightbulb"></i>
+                    <h4>Innovation</h4>
+                    <p>We embrace new technologies and methods that improve agricultural productivity and efficiency.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-heart"></i>
+                    <h4>Accessibility</h4>
+                    <p>We believe quality agricultural education should be available to everyone, regardless of location or background.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-handshake"></i>
+                    <h4>Community</h4>
+                    <p>We foster collaboration and knowledge sharing among agricultural professionals worldwide.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Call to Action -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Start Your Agricultural Journey?</h2>
+            <p>Join thousands of students and professionals who are advancing their agricultural knowledge with AgriLearn.</p>
+            <div class="cta-buttons">
+                <a href="signup.html" class="btn btn-primary">Get Started Today</a>
+                <a href="courses.html" class="btn btn-outline">Browse Courses</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>AgriLearn</h3>
+                <p>Empowering agricultural education worldwide through innovative learning experiences.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="courses.html">Courses</a></li>
+                    <li><a href="marketplace.html">Marketplace</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="help.html">Help Center</a></li>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                    <li><a href="terms.html">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Info</h4>
+                <p><i class="fas fa-envelope"></i> info@agrilearn.com</p>
+                <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                <p><i class="fas fa-map-marker-alt"></i> 123 Agriculture St, Farm City, FC 12345</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 AgriLearn. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Additional error handling for about page
+        window.addEventListener('error', function(e) {
+            console.log('Error caught:', e.error);
+        });
+
+        // Ensure images load properly
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                img.addEventListener('error', function() {
+                    console.log('Image failed to load:', this.src);
+                    // Fallback to a default image if available
+                    if (this.src.includes('team-') || this.src.includes('pic-')) {
+                        this.src = 'images/hero-image.png';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

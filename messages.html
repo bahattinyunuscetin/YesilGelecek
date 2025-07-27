@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages - AgriLearn</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/navigation.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="images/hero-image.png">
+    <style>
+        /* Professional Messages Interface Styling */
+        .messages-container {
+            display: flex;
+            height: calc(100vh - 120px);
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--box-shadow-lg);
+            overflow: hidden;
+            margin: 2rem;
+        }
+
+        .messages-sidebar {
+            width: 350px;
+            background: #f8f9fa;
+            border-right: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .messages-header {
+            padding: 1.5rem;
+            background: var(--gradient-primary);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .messages-header h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .message-filters {
+            display: flex;
+            padding: 1rem;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-light);
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            color: var(--text-light);
+        }
+
+        .filter-btn.active {
+            background: var(--primary-green);
+            color: white;
+            border-color: var(--primary-green);
+        }
+
+        .filter-btn:hover:not(.active) {
+            background: var(--gray-100);
+        }
+
+        .conversations-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .conversation-item {
+            display: flex;
+            padding: 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-light);
+            transition: background-color 0.3s ease;
+            position: relative;
+        }
+
+        .conversation-item:hover {
+            background: rgba(46, 125, 50, 0.05);
+        }
+
+        .conversation-item.active {
+            background: rgba(46, 125, 50, 0.1);
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .conversation-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .conversation-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .conversation-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .conversation-content h4 {
+            margin: 0 0 0.25rem 0;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .conversation-content p {
+            margin: 0 0 0.25rem 0;
+            color: var(--text-light);
+            font-size: 0.875rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .conversation-time {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        .conversation-status {
+            display: flex;
+            align-items: center;
+            margin-left: 0.5rem;
+        }
+
+        .unread-count {
+            background: var(--primary-green);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        .chat-header {
+            padding: 1.5rem;
+            background: white;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 1rem;
+        }
+
+        .chat-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .chat-user-details h4 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .user-status {
+            font-size: 0.875rem;
+            color: var(--success-green);
+            font-weight: 500;
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .message {
+            display: flex;
+            margin-bottom: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .message.sent {
+            justify-content: flex-end;
+        }
+
+        .message.sent .message-content {
+            background: var(--gradient-primary);
+            color: white;
+            margin-left: 3rem;
+        }
+
+        .message.received .message-content {
+            background: white;
+            color: var(--text-primary);
+            margin-right: 3rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .message-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .message-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 1rem 1.25rem;
+            border-radius: 18px;
+            position: relative;
+        }
+
+        .message-content p {
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 0.5rem;
+            display: block;
+        }
+
+        .chat-input-area {
+            padding: 1.5rem;
+            background: white;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .input-group {
+            display: flex;
+            align-items: flex-end;
+            gap: 0.75rem;
+            background: #f8f9fa;
+            border-radius: 25px;
+            padding: 0.75rem;
+        }
+
+        .attachment-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .attachment-btn:hover {
+            background: var(--gray-200);
+            color: var(--primary-green);
+        }
+
+        .message-input {
+            flex: 1;
+            border: none;
+            background: none;
+            resize: none;
+            min-height: 20px;
+            max-height: 100px;
+            padding: 0.5rem 0;
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+
+        .message-input:focus {
+            outline: none;
+        }
+
+        .send-btn {
+            background: var(--primary-green);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 1.5rem 2rem;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+        }
+
+        .modal-footer {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        /* File attachment styles */
+        .file-preview {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #e9ecef;
+            display: none;
+        }
+
+        .file-preview-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px;
+            background: white;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            border: 1px solid #dee2e6;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .file-info i {
+            color: #6c757d;
+            width: 16px;
+        }
+
+        .file-name {
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .file-size {
+            color: #6c757d;
+            font-size: 0.85em;
+        }
+
+        .remove-file-btn {
+            background: none;
+            border: none;
+            color: #dc3545;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .remove-file-btn:hover {
+            background: #f8d7da;
+        }
+
+        /* Hide file input */
+        #message-files {
+            display: none !important;
+        }
+
+        /* Loading Indicator */
+        .loading-indicator {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+
+        .loading-spinner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .loading-spinner i {
+            font-size: 2rem;
+            color: var(--primary-green);
+        }
+
+        .loading-spinner span {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Context Menu */
+        .context-menu, .chat-options-menu {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 0.5rem 0;
+            min-width: 180px;
+        }
+
+        .context-menu-item, .menu-item {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.2s ease;
+            font-size: 0.875rem;
+        }
+
+        .context-menu-item:hover, .menu-item:hover {
+            background: var(--gray-100);
+        }
+
+        .context-menu-item i, .menu-item i {
+            width: 16px;
+            color: var(--text-light);
+        }
+
+        .menu-item:hover i {
+            color: var(--primary-green);
+        }
+
+        /* Form Help Text */
+        .form-help {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+            display: block;
+        }
+
+        /* Button Styles */
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-green);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-green);
+            border: 1px solid var(--primary-green);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-green);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.8rem;
+        }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-icon:hover {
+            background: var(--gray-200);
+            color: var(--primary-green);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-light);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--gray-300);
+        }
+
+        .empty-state h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .empty-state p {
+            margin-bottom: 1.5rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .messages-container {
+                margin: 1rem;
+                height: calc(100vh - 140px);
+            }
+
+            .messages-sidebar {
+                width: 100%;
+                position: absolute;
+                z-index: 10;
+                height: 100%;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .messages-sidebar.active {
+                transform: translateX(0);
+            }
+
+            .chat-area {
+                width: 100%;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+
+            .message.received .message-content {
+                margin-right: 1rem;
+            }
+
+            .message.sent .message-content {
+                margin-left: 1rem;
+            }
+
+            .message-filters {
+                flex-wrap: wrap;
+                gap: 0.25rem;
+            }
+
+            .filter-btn {
+                font-size: 0.8rem;
+                padding: 0.375rem 0.75rem;
+            }
+
+            .chat-header {
+                padding: 1rem;
+            }
+
+            .chat-actions {
+                gap: 0.25rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 0.5rem 1rem;
+            }
+
+            .search-container {
+                display: none;
+            }
+
+            .messages-header h3 {
+                font-size: 1.1rem;
+            }
+
+            .chat-messages {
+                padding: 1rem;
+            }
+
+            .message {
+                margin-bottom: 1rem;
+            }
+        }
+
+        /* Fix for message input area */
+        .message-form {
+            width: 100%;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: flex-end;
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        .message-input {
+            flex: 1;
+            min-height: 40px;
+            max-height: 120px;
+            resize: none;
+        }
+
+        /* Fix for conversation switching */
+        .conversation-item {
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .conversation-item:hover {
+            background: var(--gray-50);
+        }
+
+        .conversation-item.active {
+            background: var(--primary-light);
+            border-left: 3px solid var(--primary-green);
+        }
+
+        /* Loading state */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <div class="logo-container">
+            <img src="images/hero-image.png" alt="AgriLearn Logo" class="logo">
+            <h1>AgriLearn</h1>
+        </div>
+        <div class="search-container">
+            <input type="text" placeholder="Search messages..." class="search-input">
+            <button type="button" class="search-btn" title="Search"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="user-menu">
+            <button type="button" onclick="logout()" class="btn logout-btn">Logout</button>
+            <div class="user-avatar">
+                <img src="images/pic-1.jpg" alt="User Avatar">
+            </div>
+        </div>
+    </header>
+
+    <!-- Beautiful Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <a href="teacher-dashboard.html" class="sidebar-brand">
+                <i class="fas fa-leaf"></i>
+                <span>AgriLearn</span>
+            </a>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="teacher-dashboard.html" class="sidebar-item">
+                <i class="fas fa-home"></i>
+                <span class="sidebar-text">Dashboard</span>
+            </a>
+            <a href="my-courses.html" class="sidebar-item">
+                <i class="fas fa-book"></i>
+                <span class="sidebar-text">My Courses</span>
+            </a>
+            <a href="students.html" class="sidebar-item">
+                <i class="fas fa-users"></i>
+                <span class="sidebar-text">Students</span>
+            </a>
+            <a href="assignments.html" class="sidebar-item">
+                <i class="fas fa-tasks"></i>
+                <span class="sidebar-text">Assignments</span>
+            </a>
+            <a href="projects.html" class="sidebar-item">
+                <i class="fas fa-project-diagram"></i>
+                <span class="sidebar-text">Projects</span>
+            </a>
+            
+            <a href="messages.html" class="sidebar-item active">
+                <i class="fas fa-envelope"></i>
+                <span class="sidebar-text">Messages</span>
+                <span class="nav-badge nav-badge-visible">3</span>
+            </a>
+            <a href="marketplace.html" class="sidebar-item">
+                <i class="fas fa-store"></i>
+                <span class="sidebar-text">Marketplace</span>
+            </a>
+            <a href="profile.html" class="sidebar-item">
+                <i class="fas fa-user"></i>
+                <span class="sidebar-text">Profile</span>
+            </a>
+            <a href="about.html" class="sidebar-item">
+                <i class="fas fa-info-circle"></i>
+                <span class="sidebar-text">About</span>
+            </a>
+            <a href="settings.html" class="sidebar-item">
+                <i class="fas fa-cog"></i>
+                <span class="sidebar-text">Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-user-info">
+                <i class="fas fa-user-circle"></i>
+                <div>
+                    <div class="user-role">Teacher</div>
+                    <div class="user-name">NANSHIE ROMUALD</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Wrapper -->
+    <div class="main-wrapper">
+        <div class="content">
+            <!-- Loading Indicator -->
+            <div class="loading-indicator">
+                <div class="loading-spinner">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <span>Loading messages...</span>
+                </div>
+            </div>
+
+            <div class="messages-container">
+                <div class="messages-sidebar">
+                    <div class="messages-header">
+                        <h3>Messages</h3>
+                        <button type="button" class="btn btn-primary btn-sm" id="compose-btn">
+                            <i class="fas fa-plus"></i> Compose
+                        </button>
+                    </div>
+
+                    <div class="message-filters">
+                        <button type="button" class="filter-btn active" data-filter="all">All</button>
+                        <button type="button" class="filter-btn" data-filter="unread">Unread</button>
+                        <button type="button" class="filter-btn" data-filter="marketplace">Marketplace</button>
+                        <button type="button" class="filter-btn" data-filter="courses">Courses</button>
+                    </div>
+
+                    <div class="conversations-list">
+                        <div class="conversation-item active" data-conversation="1">
+                            <div class="conversation-avatar">
+                                <img src="images/pic-1.jpg" alt="Farm Fresh Seller">
+                            </div>
+                            <div class="conversation-content">
+                                <h4>Green Valley Farm</h4>
+                                <p>Thank you for your order! Your vegetables...</p>
+                                <span class="conversation-time">2h ago</span>
+                            </div>
+                            <div class="conversation-status">
+                                <span class="unread-count">2</span>
+                            </div>
+                        </div>
+
+                        <div class="conversation-item" data-conversation="2">
+                            <div class="conversation-avatar">
+                                <img src="images/teacher-instruction.jpg" alt="Professor Smith">
+                            </div>
+                            <div class="conversation-content">
+                                <h4>Professor Smith</h4>
+                                <p>Great work on your composting project...</p>
+                                <span class="conversation-time">1d ago</span>
+                            </div>
+                            <div class="conversation-status">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+
+                        <div class="conversation-item" data-conversation="3">
+                            <div class="conversation-avatar">
+                                <img src="images/colaborator.webp" alt="Organic Seeds Co">
+                            </div>
+                            <div class="conversation-content">
+                                <h4>Organic Seeds Co</h4>
+                                <p>Your seed order has been shipped...</p>
+                                <span class="conversation-time">3d ago</span>
+                            </div>
+                            <div class="conversation-status">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+
+                        <div class="conversation-item" data-conversation="4">
+                            <div class="conversation-avatar">
+                                <img src="images/student-learning.jpg" alt="Jane Smith">
+                            </div>
+                            <div class="conversation-content">
+                                <h4>Jane Smith</h4>
+                                <p>Hi! I have a question about the organic...</p>
+                                <span class="conversation-time">1w ago</span>
+                            </div>
+                            <div class="conversation-status">
+                                <span class="unread-count">1</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-area">
+                    <div class="chat-header">
+                        <div class="chat-user-info">
+                            <div class="chat-avatar">
+                                <img src="images/pic-1.jpg" alt="Green Valley Farm">
+                            </div>
+                            <div class="chat-user-details">
+                                <h4>Green Valley Farm</h4>
+                                <span class="user-status">Online</span>
+                            </div>
+                        </div>
+                        <div class="chat-actions">
+                            <button type="button" class="btn btn-outline btn-sm" title="Call">
+                                <i class="fas fa-phone"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline btn-sm" title="Video Call">
+                                <i class="fas fa-video"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline btn-sm" title="More Options">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="message received">
+                            <div class="message-avatar">
+                                <img src="images/pic-1.jpg" alt="Seller">
+                            </div>
+                            <div class="message-content">
+                                <p>Hello! Thank you for your interest in our organic vegetables. We have fresh produce available for pickup or delivery.</p>
+                                <span class="message-time">Yesterday 2:30 PM</span>
+                            </div>
+                        </div>
+
+                        <div class="message sent">
+                            <div class="message-content">
+                                <p>Hi! I'd like to order 2kg of mixed vegetables. When would they be ready?</p>
+                                <span class="message-time">Yesterday 3:15 PM</span>
+                            </div>
+                        </div>
+
+                        <div class="message received">
+                            <div class="message-avatar">
+                                <img src="images/pic-1.jpg" alt="Seller">
+                            </div>
+                            <div class="message-content">
+                                <p>Perfect! I can have your order ready by tomorrow morning. Would you prefer pickup or delivery?</p>
+                                <span class="message-time">Today 9:00 AM</span>
+                            </div>
+                        </div>
+
+                        <div class="message received">
+                            <div class="message-avatar">
+                                <img src="images/pic-1.jpg" alt="Seller">
+                            </div>
+                            <div class="message-content">
+                                <p>Your order is ready for pickup! Please come by anytime between 8 AM and 6 PM.</p>
+                                <span class="message-time">Today 2:00 PM</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-area">
+                        <div id="file-preview" class="file-preview"></div>
+                        <form id="message-form" class="message-form">
+                            <input type="file" id="message-files" multiple accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.txt,.zip,.rar">
+                            <div class="input-group">
+                                <button type="button" id="attach-files-btn" class="attachment-btn" title="Attach file">
+                                    <i class="fas fa-paperclip"></i>
+                                </button>
+                                <textarea id="message-input" placeholder="Type your message..." class="message-input" rows="1"></textarea>
+                                <button type="submit" class="send-btn" title="Send Message">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of main-wrapper -->
+
+    <!-- Compose Message Modal -->
+    <div id="compose-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Compose Message</h3>
+                <button type="button" class="modal-close">&times;</button>
+            </div>
+            <form id="compose-form" class="modal-body">
+                <div class="form-group">
+                    <label for="recipient">To:</label>
+                    <input type="email" id="recipient" name="recipient" placeholder="Enter email address..." required>
+                    <small class="form-help">Enter the email address of the person you want to message</small>
+                </div>
+                <div class="form-group">
+                    <label for="subject">Subject (Optional):</label>
+                    <input type="text" id="subject" name="subject" placeholder="Enter subject">
+                </div>
+                <div class="form-group">
+                    <label for="message-content">Message:</label>
+                    <textarea id="message-content" name="message-content" placeholder="Type your message..." rows="6" required></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" id="cancel-compose">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="app-footer">
+        <div class="mobile-nav">
+            <a href="teacher-dashboard.html" class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
+            <a href="my-courses.html" class="nav-item"><i class="fas fa-book"></i><span>Courses</span></a>
+            <a href="marketplace.html" class="nav-item"><i class="fas fa-store"></i><span>Market</span></a>
+            <a href="profile.html" class="nav-item"><i class="fas fa-user"></i><span>Profile</span></a>
+        </div>
+    </footer>
+
+    <script src="js/sidebar.js"></script>
+    <script src="js/messages.js"></script>
+    <script>
+        function logout() {
+            localStorage.removeItem('agrilearn_user');
+            localStorage.removeItem('agrilearn_token');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

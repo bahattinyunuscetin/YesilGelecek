@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - AgriLearn</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/navigation.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="images/icon-leaf.png">
+    <style>
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .quiz-header {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .quiz-title {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .quiz-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .quiz-info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #6c757d;
+        }
+
+        .quiz-timer {
+            background: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.1em;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .question-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .question-number {
+            background: #28a745;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .question-points {
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            color: #2c3e50;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .option:hover {
+            border-color: #28a745;
+            background: #f8f9fa;
+        }
+
+        .option.selected {
+            border-color: #28a745;
+            background: #e8f5e8;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+
+        .option-text {
+            flex: 1;
+            font-size: 1em;
+            line-height: 1.4;
+        }
+
+        .quiz-navigation {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            bottom: 20px;
+            margin-top: 30px;
+        }
+
+        .question-progress {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #28a745;
+            transition: width 0.3s ease;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #218838;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #28a745;
+            border: 2px solid #28a745;
+        }
+
+        .btn-outline:hover {
+            background: #28a745;
+            color: white;
+        }
+
+        .quiz-complete {
+            text-align: center;
+            padding: 50px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .quiz-complete h2 {
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+
+        .score-display {
+            font-size: 2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 20px 0;
+        }
+
+        .score-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .score-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .score-item h4 {
+            margin: 0 0 10px 0;
+            color: #6c757d;
+        }
+
+        .score-item .value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        @media (max-width: 768px) {
+            .quiz-container {
+                padding: 10px;
+            }
+
+            .quiz-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .quiz-timer {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-bottom: 20px;
+            }
+
+            .question-card {
+                padding: 20px;
+            }
+
+            .quiz-navigation {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .progress-bar {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <div class="logo-container">
+            <img src="images/hero-image.png" alt="AgriLearn Logo" class="logo">
+            <h1>AgriLearn</h1>
+        </div>
+        <div class="user-menu">
+            <button onclick="logout()" class="btn logout-btn">Logout</button>
+            <div class="user-avatar">
+                <img src="images/pic-1.jpg" alt="User Avatar">
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="quiz-container">
+            <!-- Quiz Timer -->
+            <div id="quiz-timer" class="quiz-timer" style="display: none;">
+                <i class="fas fa-clock"></i>
+                <span id="timer-display">00:00</span>
+            </div>
+
+            <!-- Quiz Header -->
+            <div id="quiz-header" class="quiz-header">
+                <h1 id="quiz-title" class="quiz-title">Loading Quiz...</h1>
+                <p id="quiz-description" class="quiz-description"></p>
+                <div class="quiz-info">
+                    <div class="quiz-info-item">
+                        <i class="fas fa-question-circle"></i>
+                        <span id="total-questions">0 Questions</span>
+                    </div>
+                    <div class="quiz-info-item">
+                        <i class="fas fa-clock"></i>
+                        <span id="time-limit">0 Minutes</span>
+                    </div>
+                    <div class="quiz-info-item">
+                        <i class="fas fa-target"></i>
+                        <span id="passing-score">0% to Pass</span>
+                    </div>
+                </div>
+                <button id="start-quiz-btn" class="btn btn-primary" style="margin-top: 20px;">
+                    <i class="fas fa-play"></i> Start Quiz
+                </button>
+            </div>
+
+            <!-- Quiz Questions -->
+            <div id="quiz-questions" style="display: none;">
+                <!-- Questions will be dynamically loaded here -->
+            </div>
+
+            <!-- Quiz Navigation -->
+            <div id="quiz-navigation" class="quiz-navigation" style="display: none;">
+                <div class="question-progress">
+                    <span id="progress-text">Question 1 of 10</span>
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill" style="width: 10%;"></div>
+                    </div>
+                </div>
+                <div class="nav-buttons">
+                    <button id="prev-btn" class="btn btn-outline">
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <button id="next-btn" class="btn btn-primary">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <button id="submit-btn" class="btn btn-primary" style="display: none;">
+                        <i class="fas fa-check"></i> Submit Quiz
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quiz Complete -->
+            <div id="quiz-complete" class="quiz-complete" style="display: none;">
+                <h2><i class="fas fa-check-circle"></i> Quiz Completed!</h2>
+                <div class="score-display">
+                    <span id="final-score">0%</span>
+                </div>
+                <div class="score-breakdown">
+                    <div class="score-item">
+                        <h4>Correct Answers</h4>
+                        <div class="value" id="correct-count">0</div>
+                    </div>
+                    <div class="score-item">
+                        <h4>Total Questions</h4>
+                        <div class="value" id="total-count">0</div>
+                    </div>
+                    <div class="score-item">
+                        <h4>Time Taken</h4>
+                        <div class="value" id="time-taken">0:00</div>
+                    </div>
+                    <div class="score-item">
+                        <h4>Status</h4>
+                        <div class="value" id="pass-status">-</div>
+                    </div>
+                </div>
+                <div style="margin-top: 30px;">
+                    <button id="review-btn" class="btn btn-outline">
+                        <i class="fas fa-eye"></i> Review Answers
+                    </button>
+                    <button id="retake-btn" class="btn btn-secondary" style="margin-left: 15px;">
+                        <i class="fas fa-redo"></i> Retake Quiz
+                    </button>
+                    <a href="courses.html" class="btn btn-primary" style="margin-left: 15px;">
+                        <i class="fas fa-arrow-left"></i> Back to Course
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/quiz.js"></script>
+    <script>
+        function logout() {
+            localStorage.removeItem('agrilearn_user');
+            localStorage.removeItem('agrilearn_token');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

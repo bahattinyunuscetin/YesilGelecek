@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - AgriLearn</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="images/icon-leaf.png">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="logo-container">
+                    <img src="images/hero-image.png" alt="AgriLearn Logo" class="logo">
+                    <h1>AgriLearn</h1>
+                </div>
+            </div>
+
+            <div class="role-toggle">
+                <button class="role-btn active" data-role="teacher">Teacher</button>
+                <button class="role-btn" data-role="student">Student</button>
+            </div>
+
+            <form id="signup-form" class="auth-form">
+                <!-- Hidden field to store selected role -->
+                <input type="hidden" id="role" name="role" value="teacher">
+
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" placeholder="Enter your name..." required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email..." required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-input-container">
+                        <input type="password" id="password" name="password" placeholder="Enter your password..." required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <div class="password-input-container">
+                        <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password..." required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+            </form>
+
+            <div class="social-login">
+                <p>or sign up with</p>
+                <div class="social-buttons">
+                    <button class="social-btn facebook" title="Sign up with Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </button>
+                    <button class="social-btn google" title="Sign up with Google">
+                        <i class="fab fa-google"></i>
+                    </button>
+                    <button class="social-btn twitter" title="Sign up with Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="auth-redirect">
+                <p>Already have an account? <a href="login.html">Login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password toggle script -->
+    <script>
+        function togglePassword(id) {
+            const input = document.getElementById(id);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+    </script>
+
+    <script src="js/auth.js"></script>
+</body>
+</html>

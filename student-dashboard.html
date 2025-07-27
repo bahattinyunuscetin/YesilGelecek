@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Dashboard - AgriLearn</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/navigation.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="icon" href="images/hero-image.png" />
+  <style>
+    /* Professional Student Dashboard Styles */
+    :root {
+      --primary-color: #2e7d32;
+      --primary-light: #4caf50;
+      --primary-dark: #1b5e20;
+      --secondary-color: #ff9800;
+      --success-color: #4caf50;
+      --warning-color: #ff9800;
+      --danger-color: #f44336;
+      --info-color: #2196f3;
+      --text-color: #333;
+      --text-light: #666;
+      --bg-light: #f8f9fa;
+      --white: #ffffff;
+      --shadow: 0 2px 10px rgba(0,0,0,0.1);
+      --shadow-hover: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    .dashboard-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: var(--bg-light);
+      min-height: 100vh;
+    }
+
+    /* Welcome Hero Section */
+    .welcome-hero {
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+      color: white;
+      padding: 3rem 2rem;
+      border-radius: 16px;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .welcome-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 200px;
+      height: 200px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      transform: translate(50px, -50px);
+    }
+
+    .welcome-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .welcome-content h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .welcome-content p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      margin-bottom: 1.5rem;
+    }
+
+    .quick-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .quick-action-btn {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .quick-action-btn:hover {
+      background: rgba(255,255,255,0.3);
+      transform: translateY(-2px);
+    }
+
+    /* Statistics Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--white);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      border-left: 4px solid var(--primary-color);
+    }
+
+    .stat-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    .stat-card.courses { border-left-color: var(--primary-color); }
+    .stat-card.progress { border-left-color: var(--info-color); }
+    .stat-card.certificates { border-left-color: var(--success-color); }
+    .stat-card.assignments { border-left-color: var(--warning-color); }
+
+    .stat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .stat-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: white;
+    }
+
+    .stat-icon.courses { background: var(--primary-color); }
+    .stat-icon.progress { background: var(--info-color); }
+    .stat-icon.certificates { background: var(--success-color); }
+    .stat-icon.assignments { background: var(--warning-color); }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-change {
+      font-size: 0.8rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    .stat-change.positive {
+      background: rgba(76, 175, 80, 0.1);
+      color: var(--success-color);
+    }
+
+    .stat-change.neutral {
+      background: rgba(158, 158, 158, 0.1);
+      color: var(--text-light);
+    }
+
+    /* Content Grid */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .content-section {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--bg-light);
+    }
+
+    .section-header h2 {
+      color: var(--text-color);
+      font-size: 1.5rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .view-all-btn {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .view-all-btn:hover {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    /* Course Cards */
+    .courses-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .course-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .course-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    .course-image {
+      position: relative;
+      height: 200px;
+      overflow: hidden;
+    }
+
+    .course-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .course-progress {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      right: 1rem;
+      background: rgba(0,0,0,0.7);
+      padding: 0.5rem;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 6px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--success-color);
+      transition: width 0.3s ease;
+    }
+
+    .progress-text {
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .course-content {
+      padding: 1.5rem;
+    }
+
+    .course-content h3 {
+      color: var(--text-color);
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .course-instructor {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .course-meta {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .course-level,
+    .course-duration {
+      background: var(--bg-light);
+      color: var(--text-light);
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .continue-btn {
+      width: 100%;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .continue-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    /* Deadlines */
+    .deadlines-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .deadline-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .deadline-item:hover {
+      box-shadow: var(--shadow);
+    }
+
+    .deadline-item.urgent {
+      border-left: 4px solid var(--danger-color);
+      background: rgba(244, 67, 54, 0.05);
+    }
+
+    .deadline-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-light);
+      color: var(--text-light);
+    }
+
+    .deadline-item.urgent .deadline-icon {
+      background: var(--danger-color);
+      color: white;
+    }
+
+    .deadline-content {
+      flex: 1;
+    }
+
+    .deadline-content h4 {
+      color: var(--text-color);
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .deadline-content p {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .deadline-meta {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .deadline-date {
+      color: var(--text-light);
+      font-size: 0.8rem;
+    }
+
+    .deadline-status {
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+
+    .deadline-status.urgent {
+      background: var(--danger-color);
+      color: white;
+    }
+
+    .deadline-status.normal {
+      background: var(--bg-light);
+      color: var(--text-light);
+    }
+
+    .deadline-action {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .deadline-action:hover {
+      background: var(--primary-dark);
+    }
+
+    /* Activity Timeline */
+    .activity-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .activity-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem;
+      border-radius: 8px;
+      background: var(--bg-light);
+      transition: all 0.3s ease;
+    }
+
+    .activity-item:hover {
+      background: #f0f0f0;
+    }
+
+    .activity-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .activity-icon.completed {
+      background: var(--success-color);
+    }
+
+    .activity-icon.submitted {
+      background: var(--info-color);
+    }
+
+    .activity-icon.enrolled {
+      background: var(--primary-color);
+    }
+
+    .activity-content h4 {
+      color: var(--text-color);
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .activity-content p {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .activity-time {
+      color: var(--text-light);
+      font-size: 0.8rem;
+      font-style: italic;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .dashboard-container {
+        padding: 1rem;
+      }
+
+      .welcome-hero {
+        padding: 2rem 1rem;
+      }
+
+      .welcome-content h1 {
+        font-size: 2rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .quick-actions {
+        flex-direction: column;
+      }
+
+      .quick-action-btn {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .welcome-content h1 {
+        font-size: 1.5rem;
+      }
+
+      .stat-card {
+        padding: 1.5rem;
+      }
+
+      .content-section {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="header-left">
+        <button type="button" class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle Sidebar">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="logo-container">
+          <img src="images/hero-image.png" alt="AgriLearn Logo" class="logo">
+          <h1>AgriLearn</h1>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="user-avatar">
+          <img src="images/pic-1.jpg" alt="Student Avatar" />
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Student Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <a href="student-dashboard.html" class="sidebar-brand">
+        <i class="fas fa-leaf"></i>
+        <span>AgriLearn</span>
+      </a>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="student-dashboard.html" class="sidebar-item active">
+        <i class="fas fa-home"></i>
+        <span class="sidebar-text">Dashboard</span>
+      </a>
+      <a href="courses.html" class="sidebar-item">
+        <i class="fas fa-book"></i>
+        <span class="sidebar-text">My Courses</span>
+      </a>
+      <a href="student-assignments.html" class="sidebar-item">
+        <i class="fas fa-tasks"></i>
+        <span class="sidebar-text">Assignments</span>
+      </a>
+      <a href="student-projects.html" class="sidebar-item">
+        <i class="fas fa-project-diagram"></i>
+        <span class="sidebar-text">Projects</span>
+      </a>
+      <a href="certificates.html" class="sidebar-item">
+        <i class="fas fa-certificate"></i>
+        <span class="sidebar-text">Certificates</span>
+      </a>
+      <a href="marketplace.html" class="sidebar-item">
+        <i class="fas fa-store"></i>
+        <span class="sidebar-text">Marketplace</span>
+      </a>
+      <a href="profile.html" class="sidebar-item">
+        <i class="fas fa-user"></i>
+        <span class="sidebar-text">Profile</span>
+      </a>
+      <a href="about.html" class="sidebar-item">
+        <i class="fas fa-info-circle"></i>
+        <span class="sidebar-text">About</span>
+      </a>
+      <a href="settings.html" class="sidebar-item">
+        <i class="fas fa-cog"></i>
+        <span class="sidebar-text">Settings</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user-info">
+        <i class="fas fa-user-circle"></i>
+        <div>
+          <div class="user-role">Student</div>
+          <div class="user-name" id="sidebar-user-name">Loading...</div>
+        </div>
+      </div>
+      <button type="button" class="logout-btn" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content Wrapper -->
+  <div class="main-wrapper">
+    <main class="main-content">
+      <div class="dashboard-container">
+        <!-- Welcome Hero Section -->
+        <div class="welcome-hero">
+          <div class="welcome-content">
+            <h1>Welcome back, <span id="user-name">Student</span>!</h1>
+            <p>Continue your learning journey in agricultural education and grow your expertise.</p>
+            <div class="quick-actions">
+              <a href="courses.html" class="quick-action-btn">
+                <i class="fas fa-book"></i>
+                Browse Courses
+              </a>
+              <a href="student-assignments.html" class="quick-action-btn">
+                <i class="fas fa-tasks"></i>
+                View Assignments
+              </a>
+              <a href="marketplace.html" class="quick-action-btn">
+                <i class="fas fa-store"></i>
+                Marketplace
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="stats-grid">
+          <div class="stat-card courses">
+            <div class="stat-header">
+              <div>
+                <div class="stat-number" id="enrolled-courses">0</div>
+                <div class="stat-label">Enrolled Courses</div>
+                <div class="stat-change positive">+2 this month</div>
+              </div>
+              <div class="stat-icon courses">
+                <i class="fas fa-book"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card progress">
+            <div class="stat-header">
+              <div>
+                <div class="stat-number" id="avg-progress">0%</div>
+                <div class="stat-label">Average Progress</div>
+                <div class="stat-change positive">+15% this week</div>
+              </div>
+              <div class="stat-icon progress">
+                <i class="fas fa-chart-line"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card certificates">
+            <div class="stat-header">
+              <div>
+                <div class="stat-number" id="certificates-earned">0</div>
+                <div class="stat-label">Certificates Earned</div>
+                <div class="stat-change positive">+1 this month</div>
+              </div>
+              <div class="stat-icon certificates">
+                <i class="fas fa-certificate"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card assignments">
+            <div class="stat-header">
+              <div>
+                <div class="stat-number" id="pending-assignments">0</div>
+                <div class="stat-label">Pending Assignments</div>
+                <div class="stat-change neutral">Due this week</div>
+              </div>
+              <div class="stat-icon assignments">
+                <i class="fas fa-clock"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="content-grid">
+          <!-- Recent Courses -->
+          <div class="content-section">
+            <div class="section-header">
+              <h2><i class="fas fa-book"></i> Recent Courses</h2>
+              <a href="courses.html" class="view-all-btn">View All</a>
+            </div>
+            <div class="courses-grid" id="recent-courses">
+              <!-- Courses will be loaded here -->
+              <div class="course-card">
+                <div class="course-image">
+                  <img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=300" alt="Course">
+                  <div class="course-progress">
+                    <div class="progress-bar">
+                      <div class="progress-fill" style="width: 75%"></div>
+                    </div>
+                    <span class="progress-text">75%</span>
+                  </div>
+                </div>
+                <div class="course-content">
+                  <h3>Sustainable Agriculture Practices</h3>
+                  <p class="course-instructor">By Dr. Sarah Johnson</p>
+                  <div class="course-meta">
+                    <span class="course-level">Intermediate</span>
+                    <span class="course-duration">8 weeks</span>
+                  </div>
+                  <button type="button" class="continue-btn">Continue Learning</button>
+                </div>
+              </div>
+
+              <div class="course-card">
+                <div class="course-image">
+                  <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=300" alt="Course">
+                  <div class="course-progress">
+                    <div class="progress-bar">
+                      <div class="progress-fill" style="width: 45%"></div>
+                    </div>
+                    <span class="progress-text">45%</span>
+                  </div>
+                </div>
+                <div class="course-content">
+                  <h3>Organic Farming Fundamentals</h3>
+                  <p class="course-instructor">By Prof. Michael Chen</p>
+                  <div class="course-meta">
+                    <span class="course-level">Beginner</span>
+                    <span class="course-duration">6 weeks</span>
+                  </div>
+                  <button type="button" class="continue-btn">Continue Learning</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Upcoming Deadlines -->
+          <div class="content-section">
+            <div class="section-header">
+              <h2><i class="fas fa-clock"></i> Upcoming Deadlines</h2>
+              <a href="student-assignments.html" class="view-all-btn">View All</a>
+            </div>
+            <div class="deadlines-list" id="upcoming-deadlines">
+              <div class="deadline-item urgent">
+                <div class="deadline-icon">
+                  <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="deadline-content">
+                  <h4>Soil Analysis Assignment</h4>
+                  <p>Sustainable Agriculture Practices</p>
+                  <div class="deadline-meta">
+                    <span class="deadline-date">Due: Tomorrow</span>
+                    <span class="deadline-status urgent">Urgent</span>
+                  </div>
+                </div>
+                <button type="button" class="deadline-action">Submit</button>
+              </div>
+
+              <div class="deadline-item">
+                <div class="deadline-icon">
+                  <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="deadline-content">
+                  <h4>Crop Rotation Project</h4>
+                  <p>Organic Farming Fundamentals</p>
+                  <div class="deadline-meta">
+                    <span class="deadline-date">Due: In 3 days</span>
+                    <span class="deadline-status normal">Normal</span>
+                  </div>
+                </div>
+                <button type="button" class="deadline-action">View</button>
+              </div>
+
+              <div class="deadline-item">
+                <div class="deadline-icon">
+                  <i class="fas fa-quiz"></i>
+                </div>
+                <div class="deadline-content">
+                  <h4>Module 3 Quiz</h4>
+                  <p>Plant Breeding Techniques</p>
+                  <div class="deadline-meta">
+                    <span class="deadline-date">Due: In 1 week</span>
+                    <span class="deadline-status normal">Normal</span>
+                  </div>
+                </div>
+                <button type="button" class="deadline-action">Start</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="content-section">
+          <div class="section-header">
+            <h2><i class="fas fa-history"></i> Recent Activity</h2>
+          </div>
+          <div class="activity-timeline" id="recent-activity">
+            <div class="activity-item">
+              <div class="activity-icon completed">
+                <i class="fas fa-check"></i>
+              </div>
+              <div class="activity-content">
+                <h4>Completed: Introduction to Hydroponics</h4>
+                <p>You successfully completed the lesson and earned 50 points</p>
+                <span class="activity-time">2 hours ago</span>
+              </div>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-icon submitted">
+                <i class="fas fa-upload"></i>
+              </div>
+              <div class="activity-content">
+                <h4>Submitted: Pest Control Assignment</h4>
+                <p>Your assignment has been submitted for review</p>
+                <span class="activity-time">1 day ago</span>
+              </div>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-icon enrolled">
+                <i class="fas fa-plus"></i>
+              </div>
+              <div class="activity-content">
+                <h4>Enrolled: Advanced Irrigation Systems</h4>
+                <p>You joined a new course in Agricultural Technology</p>
+                <span class="activity-time">3 days ago</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/sidebar.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script>
+    // Student Dashboard Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load user data
+      const user = JSON.parse(localStorage.getItem('agrilearn_user') || '{}');
+      const userName = user.name || 'Student';
+
+      // Update user name displays
+      document.getElementById('user-name').textContent = userName;
+      document.getElementById('sidebar-user-name').textContent = userName;
+
+      // Load dashboard statistics
+      loadDashboardStats();
+
+      // Load recent courses
+      loadRecentCourses();
+
+      // Load upcoming deadlines
+      loadUpcomingDeadlines();
+
+      // Load recent activity
+      loadRecentActivity();
+    });
+
+    function loadDashboardStats() {
+      // Simulate loading statistics
+      setTimeout(() => {
+        document.getElementById('enrolled-courses').textContent = '5';
+        document.getElementById('avg-progress').textContent = '68%';
+        document.getElementById('certificates-earned').textContent = '3';
+        document.getElementById('pending-assignments').textContent = '4';
+      }, 500);
+    }
+
+    function loadRecentCourses() {
+      // Courses are already in HTML for demo
+      // In real app, this would fetch from API
+      console.log('Recent courses loaded');
+    }
+
+    function loadUpcomingDeadlines() {
+      // Deadlines are already in HTML for demo
+      // In real app, this would fetch from API
+      console.log('Upcoming deadlines loaded');
+    }
+
+    function loadRecentActivity() {
+      // Activity is already in HTML for demo
+      // In real app, this would fetch from API
+      console.log('Recent activity loaded');
+    }
+
+    function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        localStorage.removeItem('agrilearn_user');
+        localStorage.removeItem('agrilearn_token');
+        window.location.href = 'login.html';
+      }
+    }
+
+    // Add click handlers for course cards
+    document.querySelectorAll('.continue-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        // Navigate to course page
+        window.location.href = 'course-view.html';
+      });
+    });
+
+    // Add click handlers for deadline actions
+    document.querySelectorAll('.deadline-action').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const action = this.textContent.toLowerCase();
+        if (action === 'submit') {
+          window.location.href = 'assignment-submit.html';
+        } else if (action === 'view') {
+          window.location.href = 'assignment-view.html';
+        } else if (action === 'start') {
+          window.location.href = 'quiz-start.html';
+        }
+      });
+    });
+
+    // Add click handlers for quick actions
+    document.querySelectorAll('.quick-action-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const href = this.getAttribute('href');
+        window.location.href = href;
+      });
+    });
+  </script>
+</body>
+</html>

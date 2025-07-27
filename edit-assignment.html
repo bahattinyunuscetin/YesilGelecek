@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Assignment - AgriLearn</title>
+    <link rel="stylesheet" href="css/styles.css?v=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="images/icon-leaf.png">
+    <style>
+        .edit-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .edit-form {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .form-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .form-title {
+            font-size: 1.5rem;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-subtitle {
+            color: var(--text-light);
+        }
+        
+        .form-section {
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--gray-200);
+        }
+        
+        .action-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .loading-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-light);
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--gray-300);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .form-help {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+        
+        .required {
+            color: var(--danger);
+        }
+        
+        @media (max-width: 768px) {
+            .edit-container {
+                padding: 1rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <div class="logo-container">
+            <img src="images/hero-image.png" alt="AgriLearn Logo" class="logo">
+            <h1>AgriLearn</h1>
+        </div>
+        <div class="search-container">
+            <input type="text" placeholder="Search..." class="search-input">
+            <button type="button" class="search-btn" title="Search"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="user-menu">
+            <button type="button" onclick="logout()" class="btn logout-btn">Logout</button>
+            <div class="user-avatar">
+                <img src="images/pic-1.jpg" alt="User Avatar">
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="sidebar">
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="teacher-dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="my-courses.html"><i class="fas fa-book"></i> My Courses</a></li>
+                    <li><a href="students.html"><i class="fas fa-users"></i> Students</a></li>
+                    <li class="active"><a href="assignments.html"><i class="fas fa-clipboard-list"></i> Assignments</a></li>
+                    <li><a href="marketplace.html"><i class="fas fa-store"></i> Marketplace</a></li>
+                    <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="content">
+            <div class="edit-container">
+                <!-- Back button -->
+                <div style="margin-bottom: 1rem;">
+                    <a href="assignments.html" class="action-btn btn-outline">
+                        <i class="fas fa-arrow-left"></i> Back to Assignments
+                    </a>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loading-state" class="loading-state">
+                    <div class="loading-spinner"></div>
+                    <p>Loading assignment details...</p>
+                </div>
+
+                <!-- Edit Form -->
+                <div class="edit-form" id="edit-form" style="display: none;">
+                    <div class="form-header">
+                        <h1 class="form-title">Edit Assignment</h1>
+                        <p class="form-subtitle">Update assignment details and settings</p>
+                    </div>
+
+                    <form id="assignment-form">
+                        <div class="form-section">
+                            <h2 class="section-title">
+                                <i class="fas fa-info-circle"></i>
+                                Basic Information
+                            </h2>
+                            
+                            <div class="form-group">
+                                <label for="assignment-title">Assignment Title <span class="required">*</span></label>
+                                <input type="text" id="assignment-title" name="title" required>
+                                <div class="form-help">Enter a clear and descriptive title for the assignment</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="assignment-description">Description <span class="required">*</span></label>
+                                <textarea id="assignment-description" name="description" required placeholder="Describe what students need to do for this assignment..."></textarea>
+                                <div class="form-help">Provide detailed instructions and expectations</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="assignment-instructions">Additional Instructions</label>
+                                <textarea id="assignment-instructions" name="instructions" placeholder="Any additional instructions, requirements, or guidelines..."></textarea>
+                                <div class="form-help">Optional: Add specific requirements, formatting guidelines, or submission instructions</div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h2 class="section-title">
+                                <i class="fas fa-cog"></i>
+                                Assignment Settings
+                            </h2>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="assignment-course">Course <span class="required">*</span></label>
+                                    <select id="assignment-course" name="courseId" required>
+                                        <option value="">Select a course</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="assignment-points">Points</label>
+                                    <input type="number" id="assignment-points" name="points" min="0" max="1000" placeholder="100">
+                                    <div class="form-help">Total points for this assignment</div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="assignment-due-date">Due Date <span class="required">*</span></label>
+                                    <input type="datetime-local" id="assignment-due-date" name="dueDate" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="assignment-status">Status</label>
+                                    <select id="assignment-status" name="status">
+                                        <option value="draft">Draft</option>
+                                        <option value="published">Published</option>
+                                        <option value="closed">Closed</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <a href="assignments.html" class="action-btn btn-outline">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                            <button type="button" class="action-btn btn-danger" onclick="deleteAssignment()">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                            <button type="submit" class="action-btn btn-primary">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <div class="mobile-nav">
+            <a href="teacher-dashboard.html" class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
+            <a href="my-courses.html" class="nav-item"><i class="fas fa-book"></i><span>Courses</span></a>
+            <a href="students.html" class="nav-item"><i class="fas fa-users"></i><span>Students</span></a>
+            <a href="profile.html" class="nav-item"><i class="fas fa-user"></i><span>Profile</span></a>
+        </div>
+    </footer>
+
+    <script>
+        let assignmentId = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            assignmentId = urlParams.get('id');
+            
+            if (assignmentId) {
+                loadAssignmentData(assignmentId);
+                loadCourses();
+                setupFormSubmission();
+            } else {
+                alert('Assignment ID not found');
+                window.location.href = 'assignments.html';
+            }
+        });
+
+        async function loadAssignmentData(id) {
+            try {
+                const response = await fetch(`http://localhost:5000/api/assignments/${id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('agrilearn_token')}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const assignment = await response.json();
+                    populateForm(assignment);
+                    showForm();
+                } else {
+                    alert('Failed to load assignment data');
+                    window.location.href = 'assignments.html';
+                }
+            } catch (error) {
+                console.error('Error loading assignment:', error);
+                alert('Error loading assignment data');
+                window.location.href = 'assignments.html';
+            }
+        }
+
+        async function loadCourses() {
+            try {
+                const response = await fetch('http://localhost:5000/api/courses/my-courses', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('agrilearn_token')}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const courses = await response.json();
+                    const select = document.getElementById('assignment-course');
+                    
+                    courses.forEach(course => {
+                        const option = document.createElement('option');
+                        option.value = course._id;
+                        option.textContent = course.title;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading courses:', error);
+            }
+        }
+
+        function populateForm(assignment) {
+            document.getElementById('assignment-title').value = assignment.title || '';
+            document.getElementById('assignment-description').value = assignment.description || '';
+            document.getElementById('assignment-instructions').value = assignment.instructions || '';
+            document.getElementById('assignment-course').value = assignment.courseId || '';
+            document.getElementById('assignment-points').value = assignment.points || '';
+            document.getElementById('assignment-status').value = assignment.status || 'draft';
+            
+            // Format date for datetime-local input
+            if (assignment.dueDate) {
+                const date = new Date(assignment.dueDate);
+                const formattedDate = date.toISOString().slice(0, 16);
+                document.getElementById('assignment-due-date').value = formattedDate;
+            }
+        }
+
+        function showForm() {
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('edit-form').style.display = 'block';
+        }
+
+        function setupFormSubmission() {
+            const form = document.getElementById('assignment-form');
+            form.addEventListener('submit', handleFormSubmission);
+        }
+
+        async function handleFormSubmission(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const assignmentData = {
+                title: formData.get('title'),
+                description: formData.get('description'),
+                instructions: formData.get('instructions'),
+                courseId: formData.get('courseId'),
+                dueDate: formData.get('dueDate'),
+                points: parseInt(formData.get('points')) || 0,
+                status: formData.get('status')
+            };
+
+            // Validate required fields
+            if (!assignmentData.title || !assignmentData.description || !assignmentData.courseId || !assignmentData.dueDate) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            try {
+                // Show loading state
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+                const response = await fetch(`http://localhost:5000/api/assignments/${assignmentId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('agrilearn_token')}`
+                    },
+                    body: JSON.stringify(assignmentData)
+                });
+
+                if (response.ok) {
+                    alert('Assignment updated successfully!');
+                    window.location.href = 'assignments.html';
+                } else {
+                    const error = await response.json();
+                    alert(error.message || 'Failed to update assignment');
+                }
+            } catch (error) {
+                console.error('Error updating assignment:', error);
+                alert('Error updating assignment');
+            } finally {
+                // Reset button state
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        }
+
+        async function deleteAssignment() {
+            if (!confirm('Are you sure you want to delete this assignment? This action cannot be undone.')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:5000/api/assignments/${assignmentId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('agrilearn_token')}`
+                    }
+                });
+
+                if (response.ok) {
+                    alert('Assignment deleted successfully!');
+                    window.location.href = 'assignments.html';
+                } else {
+                    const error = await response.json();
+                    alert(error.message || 'Failed to delete assignment');
+                }
+            } catch (error) {
+                console.error('Error deleting assignment:', error);
+                alert('Error deleting assignment');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('agrilearn_user');
+            localStorage.removeItem('agrilearn_token');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

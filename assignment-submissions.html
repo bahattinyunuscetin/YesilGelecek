@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment Submissions - AgriLearn</title>
+    <link rel="stylesheet" href="css/styles.css?v=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="images/icon-leaf.png">
+    <style>
+        .submissions-container {
+            padding: 2rem;
+        }
+        
+        .assignment-header {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .assignment-title {
+            font-size: 1.5rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+        
+        .assignment-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .stat-card {
+            background: var(--gray-50);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.875rem;
+        }
+        
+        .submissions-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--gray-300);
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .submissions-table {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+        }
+        
+        .table-header {
+            background: var(--gray-50);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-title {
+            font-size: 1.25rem;
+            color: var(--text-color);
+        }
+        
+        .table-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .submissions-list {
+            padding: 0;
+        }
+        
+        .submission-item {
+            display: grid;
+            grid-template-columns: 1fr 150px 120px 100px 150px;
+            gap: 1rem;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--gray-200);
+            align-items: center;
+        }
+        
+        .submission-item:last-child {
+            border-bottom: none;
+        }
+        
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .student-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .student-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .student-name {
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .student-email {
+            color: var(--text-light);
+            font-size: 0.875rem;
+        }
+        
+        .submission-date {
+            color: var(--text-light);
+            font-size: 0.875rem;
+        }
+        
+        .submission-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-align: center;
+        }
+        
+        .status-submitted {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .status-graded {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-late {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .grade-display {
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .grade-score {
+            color: var(--primary-color);
+        }
+        
+        .grade-pending {
+            color: var(--text-light);
+        }
+        
+        .submission-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .action-btn {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-light);
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: var(--gray-400);
+        }
+        
+        .grade-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .submissions-container {
+                padding: 1rem;
+            }
+            
+            .submission-item {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+                text-align: left;
+            }
+            
+            .assignment-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .submissions-filters {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <div class="logo-container">
+            <img src="images/hero-image.png" alt="AgriLearn Logo" class="logo">
+            <h1>AgriLearn</h1>
+        </div>
+        <div class="search-container">
+            <input type="text" id="submission-search" placeholder="Search students..." class="search-input">
+            <button type="button" class="search-btn" title="Search"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="user-menu">
+            <button type="button" onclick="logout()" class="btn logout-btn">Logout</button>
+            <div class="user-avatar">
+                <img src="images/pic-1.jpg" alt="User Avatar">
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="sidebar">
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="teacher-dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="my-courses.html"><i class="fas fa-book"></i> My Courses</a></li>
+                    <li><a href="students.html"><i class="fas fa-users"></i> Students</a></li>
+                    <li class="active"><a href="assignments.html"><i class="fas fa-clipboard-list"></i> Assignments</a></li>
+                    <li><a href="marketplace.html"><i class="fas fa-store"></i> Marketplace</a></li>
+                    <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="content">
+            <div class="submissions-container">
+                <!-- Back button -->
+                <div style="margin-bottom: 1rem;">
+                    <a href="assignments.html" class="action-btn btn-outline" style="width: auto; padding: 0.5rem 1rem;">
+                        <i class="fas fa-arrow-left"></i> Back to Assignments
+                    </a>
+                </div>
+
+                <!-- Assignment Header -->
+                <div class="assignment-header">
+                    <h1 class="assignment-title" id="assignment-title">Loading...</h1>
+                    <p id="assignment-description" style="color: var(--text-light); margin-top: 0.5rem;">Loading...</p>
+                    
+                    <div class="assignment-stats">
+                        <div class="stat-card">
+                            <div class="stat-number" id="total-submissions">0</div>
+                            <div class="stat-label">Total Submissions</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="graded-submissions">0</div>
+                            <div class="stat-label">Graded</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="pending-submissions">0</div>
+                            <div class="stat-label">Pending Review</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="average-grade">--</div>
+                            <div class="stat-label">Average Grade</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="submissions-filters">
+                    <button type="button" class="filter-btn active" data-filter="all">All Submissions</button>
+                    <button type="button" class="filter-btn" data-filter="submitted">Submitted</button>
+                    <button type="button" class="filter-btn" data-filter="graded">Graded</button>
+                    <button type="button" class="filter-btn" data-filter="late">Late Submissions</button>
+                </div>
+
+                <!-- Submissions Table -->
+                <div class="submissions-table">
+                    <div class="table-header">
+                        <h2 class="table-title">Student Submissions</h2>
+                        <div class="table-actions">
+                            <button type="button" class="action-btn btn-primary" onclick="exportSubmissions()" title="Export to CSV">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="submissions-list" id="submissions-container">
+                        <!-- Submissions will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Grade Modal -->
+    <div id="grade-modal" class="grade-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Grade Submission</h3>
+                <button type="button" class="close-modal" onclick="closeGradeModal()">&times;</button>
+            </div>
+            <form id="grade-form">
+                <div class="form-group">
+                    <label for="student-name-display">Student</label>
+                    <input type="text" id="student-name-display" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="grade-score">Grade (out of <span id="max-points">100</span> points)</label>
+                    <input type="number" id="grade-score" name="grade" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="feedback">Feedback</label>
+                    <textarea id="feedback" name="feedback" placeholder="Provide feedback to the student..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="action-btn btn-outline" onclick="closeGradeModal()">Cancel</button>
+                    <button type="submit" class="action-btn btn-success">Save Grade</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="app-footer">
+        <div class="mobile-nav">
+            <a href="teacher-dashboard.html" class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
+            <a href="my-courses.html" class="nav-item"><i class="fas fa-book"></i><span>Courses</span></a>
+            <a href="students.html" class="nav-item"><i class="fas fa-users"></i><span>Students</span></a>
+            <a href="profile.html" class="nav-item"><i class="fas fa-user"></i><span>Profile</span></a>
+        </div>
+    </footer>
+
+    <script>
+        let assignmentId = null;
+        let currentSubmissions = [];
+        let currentSubmissionId = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            assignmentId = urlParams.get('id');
+            
+            if (assignmentId) {
+                loadAssignmentInfo(assignmentId);
+                loadSubmissions(assignmentId);
+                setupEventListeners();
+            } else {
+                alert('Assignment ID not found');
+                window.location.href = 'assignments.html';
+            }
+        });
+
+        function setupEventListeners() {
+            // Filter buttons
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    filterSubmissions(this.dataset.filter);
+                    
+                    // Update active state
+                    filterButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Search functionality
+            const searchInput = document.getElementById('submission-search');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    searchSubmissions(this.value);
+                });
+            }
+
+            // Grade form submission
+            const gradeForm = document.getElementById('grade-form');
+            if (gradeForm) {
+                gradeForm.addEventListener('submit', handleGradeSubmission);
+            }
+        }
+
+        async function loadAssignmentInfo(id) {
+            try {
+                const response = await fetch(`http://localhost:5000/api/assignments/${id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('agrilearn_token')}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const assignment = await response.json();
+                    displayAssignmentInfo(assignment);
+                } else {
+                    alert('Failed to load assignment information');
+                    window.location.href = 'assignments.html';
+                }
+            } catch (error) {
+                console.error('Error loading assignment:', error);
+                alert('Error loading assignment information');
+                window.location.href = 'assignments.html';
+            }
+        }
+
+        function displayAssignmentInfo(assignment) {
+            document.getElementById('assignment-title').textContent = assignment.title;
+            document.getElementById('assignment-description').textContent = assignment.description;
+            document.getElementById('max-points').textContent = assignment.points || 100;
+        }
+
+        async function loadSubmissions(id) {
+            try {
+                const response = await fetch(`http://localhost:5000/api/assignments/${id}/submissions`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('agrilearn_token')}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const submissions = await response.json();
+                    currentSubmissions = submissions;
+                    displaySubmissions(submissions);
+                    updateStats(submissions);
+                } else {
+                    console.error('Failed to load submissions');
+                }
+            } catch (error) {
+                console.error('Error loading submissions:', error);
+            }
+        }
+
+        function displaySubmissions(submissions) {
+            const container = document.getElementById('submissions-container');
+            
+            if (submissions.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <h3>No submissions yet</h3>
+                        <p>Students haven't submitted their assignments yet.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = submissions.map(submission => createSubmissionRow(submission)).join('');
+        }
+
+        function createSubmissionRow(submission) {
+            const submissionDate = new Date(submission.submittedAt);
+            const isLate = submissionDate > new Date(submission.assignment.dueDate);
+            
+            return `
+                <div class="submission-item" data-status="${submission.status}">
+                    <div class="student-info">
+                        <div class="student-avatar">
+                            ${submission.student.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div class="student-details">
+                            <div class="student-name">${submission.student.name}</div>
+                            <div class="student-email">${submission.student.email}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="submission-date">
+                        ${submissionDate.toLocaleDateString()}
+                        ${isLate ? '<br><small style="color: var(--danger);">Late</small>' : ''}
+                    </div>
+                    
+                    <div class="submission-status status-${submission.status}">
+                        ${submission.status}
+                    </div>
+                    
+                    <div class="grade-display">
+                        ${submission.grade !== undefined ? 
+                            `<span class="grade-score">${submission.grade}/${submission.assignment.points}</span>` :
+                            `<span class="grade-pending">Not graded</span>`
+                        }
+                    </div>
+                    
+                    <div class="submission-actions">
+                        <button type="button" class="action-btn btn-primary" onclick="viewSubmission('${submission._id}')" title="View Submission">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button type="button" class="action-btn btn-success" onclick="gradeSubmission('${submission._id}', '${submission.student.name}')" title="Grade">
+                            <i class="fas fa-star"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateStats(submissions) {
+            const total = submissions.length;
+            const graded = submissions.filter(s => s.status === 'graded').length;
+            const pending = submissions.filter(s => s.status === 'submitted').length;
+            
+            const gradedSubmissions = submissions.filter(s => s.grade !== undefined);
+            const averageGrade = gradedSubmissions.length > 0 ? 
+                (gradedSubmissions.reduce((sum, s) => sum + s.grade, 0) / gradedSubmissions.length).toFixed(1) : '--';
+
+            document.getElementById('total-submissions').textContent = total;
+            document.getElementById('graded-submissions').textContent = graded;
+            document.getElementById('pending-submissions').textContent = pending;
+            document.getElementById('average-grade').textContent = averageGrade;
+        }
+
+        function filterSubmissions(filter) {
+            const items = document.querySelectorAll('.submission-item');
+            
+            items.forEach(item => {
+                if (filter === 'all') {
+                    item.style.display = 'grid';
+                } else if (filter === 'late') {
+                    const hasLate = item.innerHTML.includes('Late');
+                    item.style.display = hasLate ? 'grid' : 'none';
+                } else {
+                    const status = item.dataset.status;
+                    item.style.display = status === filter ? 'grid' : 'none';
+                }
+            });
+        }
+
+        function searchSubmissions(query) {
+            const items = document.querySelectorAll('.submission-item');
+            const searchTerm = query.toLowerCase();
+            
+            items.forEach(item => {
+                const studentName = item.querySelector('.student-name').textContent.toLowerCase();
+                const studentEmail = item.querySelector('.student-email').textContent.toLowerCase();
+                
+                if (studentName.includes(searchTerm) || studentEmail.includes(searchTerm)) {
+                    item.style.display = 'grid';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        function viewSubmission(submissionId) {
+            window.location.href = `submission-detail.html?id=${submissionId}`;
+        }
+
+        function gradeSubmission(submissionId, studentName) {
+            currentSubmissionId = submissionId;
+            document.getElementById('student-name-display').value = studentName;
+            
+            // Load existing grade if available
+            const submission = currentSubmissions.find(s => s._id === submissionId);
+            if (submission && submission.grade !== undefined) {
+                document.getElementById('grade-score').value = submission.grade;
+                document.getElementById('feedback').value = submission.feedback || '';
+            } else {
+                document.getElementById('grade-score').value = '';
+                document.getElementById('feedback').value = '';
+            }
+            
+            document.getElementById('grade-modal').style.display = 'block';
+        }
+
+        function closeGradeModal() {
+            document.getElementById('grade-modal').style.display = 'none';
+            currentSubmissionId = null;
+        }
+
+        async function handleGradeSubmission(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const gradeData = {
+                grade: parseInt(formData.get('grade')),
+                feedback: formData.get('feedback')
+            };
+
+            try {
+                const response = await fetch(`http://localhost:5000/api/assignments/submissions/${currentSubmissionId}/grade`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('agrilearn_token')}`
+                    },
+                    body: JSON.stringify(gradeData)
+                });
+
+                if (response.ok) {
+                    alert('Grade saved successfully!');
+                    closeGradeModal();
+                    loadSubmissions(assignmentId);
+                } else {
+                    const error = await response.json();
+                    alert(error.message || 'Failed to save grade');
+                }
+            } catch (error) {
+                console.error('Error saving grade:', error);
+                alert('Error saving grade');
+            }
+        }
+
+        function exportSubmissions() {
+            // Implementation for exporting submissions to CSV
+            alert('Export functionality will be implemented soon!');
+        }
+
+        function logout() {
+            localStorage.removeItem('agrilearn_user');
+            localStorage.removeItem('agrilearn_token');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

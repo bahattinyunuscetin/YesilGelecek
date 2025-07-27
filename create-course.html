@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Course - AgriLearn</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/navigation.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" href="images/hero-image.png">
+  <style>
+    /* Professional Course Creation Styles */
+    :root {
+      --primary-color: #2e7d32;
+      --primary-light: #4caf50;
+      --primary-dark: #1b5e20;
+      --secondary-color: #ff9800;
+      --success-color: #4caf50;
+      --warning-color: #ff9800;
+      --danger-color: #f44336;
+      --info-color: #2196f3;
+      --text-color: #333;
+      --text-light: #666;
+      --bg-light: #f8f9fa;
+      --white: #ffffff;
+      --shadow: 0 2px 10px rgba(0,0,0,0.1);
+      --shadow-hover: 0 4px 20px rgba(0,0,0,0.15);
+      --border-radius: 12px;
+    }
+
+    .create-course-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: var(--bg-light);
+      min-height: 100vh;
+    }
+
+    /* Hero Header */
+    .course-creation-hero {
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+      color: white;
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .course-creation-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 150px;
+      height: 150px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      transform: translate(30px, -30px);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .hero-content h1 {
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .hero-content p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      margin-bottom: 1rem;
+    }
+
+    .progress-indicator {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .progress-step {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .progress-step.active {
+      background: rgba(255,255,255,0.3);
+    }
+
+    /* Form Container */
+    .course-form {
+      background: var(--white);
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+    }
+
+    .form-section {
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .form-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .section-title {
+      color: var(--text-color);
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-title i {
+      color: var(--primary-color);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-row.single {
+      grid-template-columns: 1fr;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text-color);
+      font-size: 0.95rem;
+    }
+
+    .form-group label .required {
+      color: var(--danger-color);
+      margin-left: 0.25rem;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: var(--white);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+    }
+
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+      font-family: inherit;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: #999;
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    .file-upload {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      width: 100%;
+    }
+    
+    .file-upload input[type="file"] {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    
+    .file-upload-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      border: 2px dashed #ddd;
+      border-radius: 8px;
+      text-align: center;
+      color: var(--text-light);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: var(--bg-light);
+      min-height: 120px;
+    }
+
+    .file-upload-label i {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: var(--primary-color);
+    }
+
+    .file-upload-label .upload-text {
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+
+    .file-upload-label .upload-hint {
+      font-size: 0.8rem;
+      color: #999;
+    }
+
+    .file-upload:hover .file-upload-label {
+      border-color: var(--primary-color);
+      background: rgba(46, 125, 50, 0.05);
+    }
+
+    .file-upload.has-file .file-upload-label {
+      border-color: var(--success-color);
+      background: rgba(76, 175, 80, 0.05);
+      color: var(--success-color);
+    }
+
+    .file-upload.drag-over .file-upload-label {
+      border-color: var(--primary-color);
+      background: rgba(46, 125, 50, 0.1);
+      transform: scale(1.02);
+    }
+
+    .image-preview {
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    .image-preview img {
+      max-width: 300px;
+      max-height: 200px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .image-preview .file-name {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+    
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 2px solid var(--bg-light);
+    }
+
+    .btn {
+      padding: 0.75rem 2rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      min-width: 140px;
+    }
+
+    .btn-primary {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text-light);
+      border: 2px solid var(--text-light);
+    }
+
+    .btn-outline:hover {
+      background: var(--text-light);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .btn-success {
+      background: var(--success-color);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #388e3c;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-light);
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .error-message {
+      background: rgba(244, 67, 54, 0.1);
+      color: var(--danger-color);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      display: none;
+      border-left: 4px solid var(--danger-color);
+    }
+
+    .success-message {
+      background: rgba(76, 175, 80, 0.1);
+      color: var(--success-color);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      display: none;
+      border-left: 4px solid var(--success-color);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .create-course-container {
+        padding: 1rem;
+      }
+
+      .course-creation-hero {
+        padding: 1.5rem;
+      }
+
+      .hero-content h1 {
+        font-size: 1.8rem;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .form-actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .progress-indicator {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="header-left">
+        <button type="button" class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle Sidebar">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="logo-container">
+          <img src="images/hero-image.png" alt="AgriLearn Logo" class="logo">
+          <h1>AgriLearn</h1>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="user-avatar">
+          <img src="images/pic-1.jpg" alt="Teacher Avatar" />
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Professional Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <a href="teacher-dashboard.html" class="sidebar-brand">
+        <i class="fas fa-leaf"></i>
+        <span>AgriLearn</span>
+      </a>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="teacher-dashboard.html" class="sidebar-item">
+        <i class="fas fa-home"></i>
+        <span class="sidebar-text">Dashboard</span>
+      </a>
+      <a href="my-courses.html" class="sidebar-item active">
+        <i class="fas fa-book"></i>
+        <span class="sidebar-text">My Courses</span>
+      </a>
+      <a href="students.html" class="sidebar-item">
+        <i class="fas fa-users"></i>
+        <span class="sidebar-text">Students</span>
+      </a>
+      <a href="assignments.html" class="sidebar-item">
+        <i class="fas fa-tasks"></i>
+        <span class="sidebar-text">Assignments</span>
+      </a>
+      <a href="projects.html" class="sidebar-item">
+        <i class="fas fa-project-diagram"></i>
+        <span class="sidebar-text">Projects</span>
+      </a>
+      <a href="messages.html" class="sidebar-item">
+        <i class="fas fa-envelope"></i>
+        <span class="sidebar-text">Messages</span>
+        <span class="nav-badge nav-badge-visible">3</span>
+      </a>
+      <a href="marketplace.html" class="sidebar-item">
+        <i class="fas fa-store"></i>
+        <span class="sidebar-text">Marketplace</span>
+      </a>
+      <a href="profile.html" class="sidebar-item">
+        <i class="fas fa-user"></i>
+        <span class="sidebar-text">Profile</span>
+      </a>
+      <a href="about.html" class="sidebar-item">
+        <i class="fas fa-info-circle"></i>
+        <span class="sidebar-text">About</span>
+      </a>
+      <a href="settings.html" class="sidebar-item">
+        <i class="fas fa-cog"></i>
+        <span class="sidebar-text">Settings</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user-info">
+        <i class="fas fa-user-circle"></i>
+        <div>
+          <div class="user-role">Teacher</div>
+          <div class="user-name">NANSHIE ROMUALD</div>
+        </div>
+      </div>
+      <button type="button" class="logout-btn" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content Wrapper -->
+  <div class="main-wrapper">
+    <main class="main-content">
+      <div class="create-course-container">
+        <!-- Hero Header -->
+        <div class="course-creation-hero">
+          <div class="hero-content">
+            <h1>Create New Course</h1>
+            <p>Share your agricultural knowledge with students around the world</p>
+            <div class="progress-indicator">
+              <div class="progress-step active">
+                <i class="fas fa-info-circle"></i>
+                Course Details
+              </div>
+              <div class="progress-step">
+                <i class="fas fa-list"></i>
+                Content Structure
+              </div>
+              <div class="progress-step">
+                <i class="fas fa-check"></i>
+                Review & Publish
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-form">
+
+          <div id="error-message" class="error-message"></div>
+          <div id="success-message" class="success-message"></div>
+
+          <form id="create-course-form" enctype="multipart/form-data">
+            <!-- Basic Information Section -->
+            <div class="form-section">
+              <h3 class="section-title">
+                <i class="fas fa-info-circle"></i>
+                Basic Information
+              </h3>
+
+              <div class="form-group">
+                <label for="course-title">Course Title <span class="required">*</span></label>
+                <input type="text" id="course-title" name="title" required placeholder="Enter a descriptive course title">
+              </div>
+
+              <div class="form-group">
+                <label for="course-description">Course Description <span class="required">*</span></label>
+                <textarea id="course-description" name="description" required placeholder="Provide a comprehensive description of your course content, learning objectives, and what students will achieve"></textarea>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="course-category">Category <span class="required">*</span></label>
+                  <select id="course-category" name="category" required>
+                    <option value="">Select category</option>
+                    <option value="agriculture">Agriculture</option>
+                    <option value="livestock">Livestock Management</option>
+                    <option value="organic-farming">Organic Farming</option>
+                    <option value="crop-management">Crop Management</option>
+                    <option value="soil-science">Soil Science</option>
+                    <option value="irrigation">Irrigation Systems</option>
+                    <option value="pest-control">Pest Control</option>
+                    <option value="plant-breeding">Plant Breeding</option>
+                    <option value="agricultural-economics">Agricultural Economics</option>
+                    <option value="farm-management">Farm Management</option>
+                    <option value="technology">Agricultural Technology</option>
+                    <option value="business">Farm Business</option>
+                    <option value="sustainability">Sustainable Agriculture</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="course-level">Difficulty Level <span class="required">*</span></label>
+                  <select id="course-level" name="level" required>
+                    <option value="">Select level</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Course Details Section -->
+            <div class="form-section">
+              <h3 class="section-title">
+                <i class="fas fa-cog"></i>
+                Course Details
+              </h3>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="course-duration">Duration (hours)</label>
+                  <input type="number" id="course-duration" name="duration" min="1" placeholder="e.g., 20">
+                </div>
+
+                <div class="form-group">
+                  <label for="course-price">Price ($)</label>
+                  <input type="number" id="course-price" name="price" min="0" step="0.01" placeholder="e.g., 99.99">
+                </div>
+              </div>
+            </div>
+
+            <!-- Course Image Section -->
+            <div class="form-section">
+              <h3 class="section-title">
+                <i class="fas fa-image"></i>
+                Course Image
+              </h3>
+
+              <div class="form-group">
+                <label for="course-image">Course Thumbnail</label>
+                <div class="file-upload">
+                  <input type="file" id="course-image" name="image" accept="image/*">
+                  <label for="course-image" class="file-upload-label">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <div class="upload-text">Choose course image</div>
+                    <div class="upload-hint">Drag and drop or click to browse (JPG, PNG, max 5MB)</div>
+                  </label>
+                </div>
+                <div id="image-preview" class="image-preview"></div>
+              </div>
+            </div>
+
+            <!-- Additional Information Section -->
+            <div class="form-section">
+              <h3 class="section-title">
+                <i class="fas fa-list-ul"></i>
+                Additional Information
+              </h3>
+
+              <div class="form-group">
+                <label for="course-objectives">Learning Objectives</label>
+                <textarea id="course-objectives" name="objectives" placeholder="List the key learning objectives students will achieve (one per line)"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="course-prerequisites">Prerequisites</label>
+                <textarea id="course-prerequisites" name="prerequisites" placeholder="List any prerequisites or recommended background knowledge"></textarea>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" onclick="window.history.back()" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Cancel
+              </button>
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Create Course
+              </button>
+            </div>
+          </form>
+
+          <div id="loading" class="loading">
+            <div class="loading-spinner"></div>
+            <h3>Creating your course...</h3>
+            <p>Please wait while we process your course information</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Sidebar toggle functionality
+    function toggleSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      const mainWrapper = document.querySelector('.main-wrapper');
+
+      sidebar.classList.toggle('collapsed');
+      mainWrapper.classList.toggle('sidebar-collapsed');
+    }
+
+    // Auto-collapse sidebar on mobile
+    function handleResize() {
+      const sidebar = document.querySelector('.sidebar');
+      const mainWrapper = document.querySelector('.main-wrapper');
+
+      if (window.innerWidth <= 768) {
+        sidebar.classList.add('collapsed');
+        mainWrapper.classList.add('sidebar-collapsed');
+      } else {
+        sidebar.classList.remove('collapsed');
+        mainWrapper.classList.remove('sidebar-collapsed');
+      }
+    }
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Initial check
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuth();
+      setupEventListeners();
+    });
+
+    function checkAuth() {
+      const user = JSON.parse(localStorage.getItem('agrilearn_user'));
+      const token = localStorage.getItem('agrilearn_token');
+      
+      if (!user || !token || user.role !== 'teacher') {
+        window.location.href = 'login.html';
+        return;
+      }
+    }
+
+    function setupEventListeners() {
+      const form = document.getElementById('create-course-form');
+      const imageInput = document.getElementById('course-image');
+
+      form.addEventListener('submit', handleFormSubmit);
+      imageInput.addEventListener('change', handleImagePreview);
+      enhanceFileUpload();
+    }
+
+    function enhanceFileUpload() {
+      const fileUpload = document.querySelector('.file-upload');
+      const fileInput = document.getElementById('course-image');
+
+      // Drag and drop functionality
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        fileUpload.addEventListener(eventName, preventDefaults, false);
+      });
+
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      ['dragenter', 'dragover'].forEach(eventName => {
+        fileUpload.addEventListener(eventName, highlight, false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        fileUpload.addEventListener(eventName, unhighlight, false);
+      });
+
+      function highlight() {
+        fileUpload.classList.add('drag-over');
+      }
+
+      function unhighlight() {
+        fileUpload.classList.remove('drag-over');
+      }
+
+      fileUpload.addEventListener('drop', handleDrop, false);
+
+      function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+
+        if (files.length > 0) {
+          fileInput.files = files;
+          handleImagePreview({ target: fileInput });
+          fileUpload.classList.add('has-file');
+        }
+      }
+    }
+
+    function handleImagePreview(e) {
+      const file = e.target.files[0];
+      const preview = document.getElementById('image-preview');
+      const fileUpload = document.querySelector('.file-upload');
+
+      if (file) {
+        // Validate file size (5MB max)
+        if (file.size > 5 * 1024 * 1024) {
+          showError('File size must be less than 5MB');
+          e.target.value = '';
+          return;
+        }
+
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+          showError('Please select a valid image file');
+          e.target.value = '';
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.innerHTML = `
+            <img src="${e.target.result}" alt="Course preview">
+            <p class="file-name">${file.name}</p>
+          `;
+          fileUpload.classList.add('has-file');
+        };
+        reader.onerror = function() {
+          showError('Error reading the selected file. Please try again.');
+        };
+        reader.readAsDataURL(file);
+      } else {
+        preview.innerHTML = '';
+        fileUpload.classList.remove('has-file');
+      }
+    }
+
+    async function handleFormSubmit(e, isDraft = false) {
+      if (e) e.preventDefault();
+
+      const form = document.getElementById('create-course-form');
+      const formData = new FormData(form);
+
+      // Validate required fields
+      const title = formData.get('title');
+      const description = formData.get('description');
+      const category = formData.get('category');
+      const level = formData.get('level');
+
+      if (!title || !description || !category || !level) {
+        showError('Please fill in all required fields');
+        return;
+      }
+
+      showLoading(true);
+      hideMessages();
+
+      try {
+        // Convert FormData to JSON object for the server
+        const courseData = {
+          title: formData.get('title').trim(),
+          description: formData.get('description').trim(),
+          category: formData.get('category'),
+          level: formData.get('level'),
+          duration: formData.get('duration') ? `${formData.get('duration')} hours` : '10 hours',
+          price: parseFloat(formData.get('price')) || 0,
+          objectives: formData.get('objectives') || '',
+          prerequisites: formData.get('prerequisites') || '',
+          isPublished: !isDraft
+        };
+
+        // Handle image upload separately if file is selected
+        const imageFile = formData.get('image');
+        if (imageFile && imageFile.size > 0) {
+          // For now, we'll create the course without image and add image later
+          // In a production app, you'd upload the image first or use a different endpoint
+          courseData.image = 'images/default-course.jpg';
+        } else {
+          // Use default course image if no image is uploaded
+          courseData.image = 'images/default-course.jpg';
+        }
+
+        console.log('Sending course data:', courseData);
+
+        const token = localStorage.getItem('agrilearn_token');
+        console.log('Using token:', token ? 'Token present' : 'No token');
+
+        // Let's try a different endpoint that doesn't require authentication first
+        try {
+          console.log('Testing server connection...');
+          const testResponse = await fetch('http://localhost:5000/');
+          console.log('Server test response:', testResponse.status);
+        } catch (testError) {
+          console.error('Server connection test failed:', testError);
+        }
+
+        // Now try the API endpoint
+        const response = await fetch('http://localhost:5000/courses', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(courseData)
+        });
+
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
+
+        const data = await response.json();
+        console.log('Response data:', data);
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Failed to create course');
+        }
+
+        showSuccess(isDraft ? 'Course saved as draft!' : 'Course created successfully! Redirecting...');
+
+        setTimeout(() => {
+          window.location.href = 'my-courses.html';
+        }, 2000);
+
+      } catch (error) {
+        console.error('Error creating course:', error);
+        showError(error.message || 'Failed to create course. Please try again.');
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    function showLoading(show) {
+      const loading = document.getElementById('loading');
+      const form = document.getElementById('create-course-form');
+      
+      loading.style.display = show ? 'block' : 'none';
+      
+      // Disable form elements
+      const inputs = form.querySelectorAll('input, textarea, select, button');
+      inputs.forEach(input => {
+        input.disabled = show;
+      });
+    }
+
+    function showError(message) {
+      const errorDiv = document.getElementById('error-message');
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+    }
+
+    function showSuccess(message) {
+      const successDiv = document.getElementById('success-message');
+      successDiv.textContent = message;
+      successDiv.style.display = 'block';
+    }
+
+    function hideMessages() {
+      document.getElementById('error-message').style.display = 'none';
+      document.getElementById('success-message').style.display = 'none';
+    }
+
+    function logout() {
+      localStorage.removeItem('agrilearn_user');
+      localStorage.removeItem('agrilearn_token');
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>
